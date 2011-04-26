@@ -1,0 +1,19 @@
+
+     citHeader("To cite package 'spikeSlabGAM' in publications please use:")
+     
+     desc <- packageDescription("spikeSlabGAM")
+     year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
+     vers <- paste("R package version", desc$Version)
+    
+     citEntry(entry="Article",
+              title = "spikeSlabGAM: Bayesian Variable Selection, Model Choice and Regularization for Generalized
+    Additive Mixed Models in R",
+              author = "Fabian Scheipl",
+              year = "2011",
+              note = "under revision",
+              journal = "Journal of Statistical Software",
+              number= " ",
+              volume= " ",
+              pages= " ",
+              textVersion = "Scheipl, F. (2011), spikeSlabGAM: Bayesian Variable Selection, Model Choice and Regularization for Generalized
+    Additive Mixed Models in R. Journal of Statistical Software, under revision")               

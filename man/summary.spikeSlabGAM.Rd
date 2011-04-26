@@ -1,0 +1,26 @@
+\name{summary.spikeSlabGAM}
+\alias{summary.spikeSlabGAM}
+\title{Summary for posterior of a spikeSlabGAM fit...}
+\usage{\method{summary}{spikeSlabGAM}(object, threshold=0.5, ...)
+}
+\description{Summary for posterior of a \code{spikeSlabGAM} fit}
+\details{Returns basic information about prior and model structure, posterior means 
+of inclusion probablities, term inportance and the most probable models found by the SSVS. 
+
+Two scalar summaries of term importance are included: \describe{
+\item{\code{P(gamma=1)}}{The posterior mean of \eqn{P(\gamma=1)}, i.e. the marginal posterior inclusion probability of the term.}
+\item{\code{pi}}{The scaled dot products of the posterior mean of the linear predictor \eqn{\eta_i} associated with the \eqn{i}-th term
+and the total linear predictor \eqn{\eta}: \eqn{\pi_i = \eta_i^T \eta/ \eta^T \eta}. They sum to one (but can be negative as well), 
+and (for mutually orthogonal \eqn{\eta_i}) provide a percentage decomposition of the sum of squares of \eqn{\eta}. See references for details.}} 
+The summary also shows the dimensionality of the basis associated with a term. 
+
+The top row in the model table shows the relative frequency of the respective model, the bottom row shows cumulative relative frequencies 
+for the models visited most often.}
+\value{an object of class \code{summary.spikeSlabGAM}}
+\author{Fabian Scheipl}
+\references{Gu, Chong (2002). Smoothing Spline ANOVA models. Springer. (see chapter 3.6)}
+\arguments{\item{object}{an object of class \code{spikeSlabGAM}}
+\item{threshold}{threshold for inclusion of a model term.  Defaults to 0.5.}
+\item{...}{arguments passed from or to other methods (not used)}
+}
+
