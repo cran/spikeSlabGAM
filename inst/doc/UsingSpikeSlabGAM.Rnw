@@ -68,7 +68,8 @@
 <<compile, echo=F, eval=F>>=
 setwd("~/RegularBayes/Workspace/spikeSlabGAM/pkg/inst/doc/")
 Sweave("UsingSpikeSlabGAM.Rnw")
-tools:::texi2dvi("UsingSpikeSlabGAM.tex", pdf=T)
+tools:::texi2dvi("UsingSpikeSlabGAM.tex", pdf=TRUE, clean=TRUE, quiet=FALSE)
+
 @
 
 
@@ -97,10 +98,12 @@ The  \proglang{R} package \pkg{spikeSlabGAM} implements Bayesian variable select
 appropriate subset of potential covariates and their interactions, (2) to determine whether linear or more
 flexible functional forms are required to model the effects of the respective covariates, and (3) to estimate
 their shapes. Selection and regularization of the model terms is based on a novel spike-and-slab-type prior
-on coefficient groups associated with parametric and semi-parametric effects.
+on coefficient groups associated with parametric and semi-parametric effects.\\
 
-\emph{Note: This introduction to \pkg{spikeSlabGAM} is currently under revision at 
-the Journal of Statistical Software.}\\
+\noindent \emph{Note}: An earlier version of this introduction to \pkg{spikeSlabGAM} has been published as \\
+\noindent Fabian Scheipl (2011).\\
+\noindent \pkg{spikeSlabGAM}: Bayesian Variable Selection, Model Choice and Regularization for Generalized Additive Mixed Models in \proglang{R}.\\
+\noindent \emph{Journal of Statistical Software}, \textbf{43}(14), 1--24.
  
 }
 \Keywords{MCMC, P-splines, spike-and-slab prior, normal-inverse-gamma}
@@ -931,7 +934,7 @@ p1 <- plot(m, maxPlotsPerPage=12, ggElems=list(opts(legend.key.size = unit(0.01,
 arrangeHere <- function(...) arrange.ggplots(..., rows=as.list(rep(1:4,3)), cols=as.list(rep(1:3, e=4)))
 do.call(arrangeHere, p1)
 @
-\caption{Posterior means and pointwise 80\% credible intervals for \texttt{m1}. 
+\caption{Posterior means and pointwise 80\% credible intervals for \texttt{m}. 
 Interaction surfaces of two numerical covariates 
 are displayed as color coded contour plots, with regions in which the credible interval does not overlap zero marked 
 in blue ($\eta < 0$) or red ($\eta > 0$). Each panel contains a marginal rug plot that shows where the observations are located. 
@@ -943,7 +946,7 @@ are displayed. All effects of the noise variables are $\approx 0$, note the diff
 Vertical axes can be forced to the same range by setting option \code{commonEtaScale}.}
 \label{fig:m1}
 \end{center}\end{figure}
-Figure \ref{fig:m1} shows the estimated effects for \code{m1}.  
+Figure \ref{fig:m1} shows the estimated effects for \code{m}.  
 
 Plots for specific terms can be requested with the \code{label} argument, Figures \ref{fig:m1Sm1} and \ref{fig:m1Sm2f}
 show code snippets and their output for $f(\mathtt{sm1})$ and $f(\mathtt{sm2, f})$. 
@@ -973,7 +976,7 @@ pSm1Cum <- pSm11[[1]] + geom_line(data=trueFsm1, aes(x=sm1, y=truth), lty=2)  + 
 arrange.ggplots(pSm1Sep[[1]], pSm1Sep[[2]], pSm1Cum)
 @
 \caption{Posterior means and pointwise 80\% credible intervals for $f(\mathtt{sm1})$ in 
-\texttt{m1}. Left and middle panel show the separate \texttt{lin()}- and \texttt{sm()}-terms returned by the first call to \code{plot}, 
+\texttt{m}. Left and middle panel show the separate \texttt{lin()}- and \texttt{sm()}-terms returned by the first call to \code{plot}, 
 right panel shows their sum. True shape of $f(\mathtt{sm1})$ added as a dashed line with the \texttt{ggElems} option of \texttt{plot.spikeSlabGAM}.}
 \label{fig:m1Sm1}
 \end{center}\end{figure}
@@ -991,7 +994,7 @@ trueFsm2f <-data.frame(truth=fsm2f-mean(fsm2f), sm2=sm2, f=f)
 plot(m, labels="sm(sm2):fct(f)", ggElems=list(geom_line(aes(x=sm2, y=truth, colour=f), data=trueFsm2f, linetype=2)))
 @
 \caption{Posterior means and pointwise 80\% credible intervals for $f(\mathtt{sm2}, \mathtt{f})$ in 
-\texttt{m1}. True shape of $f(\mathtt{sm2}|\mathtt{f})$ added as dashed line for each level of \texttt{f}.}
+\texttt{m}. True shape of $f(\mathtt{sm2}|\mathtt{f})$ added as dashed line for each level of \texttt{f}.}
 \label{fig:m1Sm2f}
 \end{center}\end{figure}
 
@@ -1101,7 +1104,7 @@ Discussions with and feedback from Thomas Kneib, Ludwig
 Fahrmeir and Simon N. Wood were enlightening and inspiring. 
 Susanne Konrath shared an office with the author and his slovenly ways without complaint.
 Brigitte Maxa fought like a lioness to make sure the author kept getting a paycheck.
-An anonymous referee at JSS revigorated the author's faith in the peer review process with his diligent 
+An anonymous referee at JSS reinvigorated the author's faith in the peer review process with his diligent 
 and constructive review of an earlier draft of this vignette.
 Financial support from the German Science Foundation (grant FA 128/5-1) is gratefully acknowledged.
 

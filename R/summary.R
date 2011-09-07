@@ -40,7 +40,7 @@ summary.spikeSlabGAM <- function(object, threshold=.5, ...){
 		colnames(etas)[NCOL(etas)] <- "resid"
 	}   
 	
-	trmSummary <- matrix(NA, nr=q, ncol=3)
+	trmSummary <- matrix(NA, nrow=q, ncol=3)
 	rownames(trmSummary) <- unique(names(object$model$groupIndicatorsOrig))
 	colnames(trmSummary) <- c("P(gamma=1)", "pi", "dim")
 	penRows <- (rownames(trmSummary)!="u") & !grepl("u(", rownames(trmSummary), fixed=T) 

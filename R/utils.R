@@ -68,7 +68,7 @@ getModels <- function(x, thresh = 0.5) {
 						apply(1*(x > thresh), 1, paste, collapse="")	
 					}))
 	t <- table(models)
-	c(sort(t/sum(t), dec=T))
+	c(sort(t/sum(t), decreasing=T))
 } 
 
 #check whether points are inside 2-d polygon defined by vertices 

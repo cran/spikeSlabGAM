@@ -276,7 +276,7 @@ mrf <- function(x, N, decomposition=c("ortho", "MM"), tol=1e-10, rankZ=.995){
 	attributes(lvlMap$lvl)$contrasts <- NULL
 	makeNewX <- function(xnew){
 		if(!all(xnew %in% lvls)) stop("unknown regions for ", label,".")
-		B <- matrix(0, nr=length(xnew), nc=nc)
+		B <- matrix(0, nrow=length(xnew), ncol=nc)
 		for(i in 1:length(lvls)){
 			ind <- which(xnew == lvlMap$lvl[i])
 			if(length(ind)){

@@ -24,7 +24,7 @@
 #' @param minUniqueValues the minimal number of unique values a covariate has to have in order to not be treated as a factor. Defaults to 6.
 #' @param lowRankInteractions should a low-rank approximation of the design matrix for interaction terms based on a (truncated) spectral decomposition 
 #' 		of the implied covariance matrix be used? defaults to TRUE.   
-#' @param orthogonalizeInteractions should the design matrices for interaction terms be projected into the complement of thhe column space of the 
+#' @param orthogonalizeInteractions should the design matrices for interaction terms be projected into the complement of the column space of the 
 #' 		respective main effects?  Can help separate marginal and interaction effects. Defaults to TRUE.
 #' @param decomposition which decomposition to use, see \code{\link{sm}}. Defaults to the default of \code{\link{sm}}. 
 #' @return a list with components: 
