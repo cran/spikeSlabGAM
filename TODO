@@ -3,14 +3,17 @@ hi prio, little wrk:
 - quantile based knots for P-splines
 - discard chains that got stuck (?)
 - use rlecuyer for parallel RNG
+- plotting for fct:num interaction fails if original data frame has fct's that are saved as numerics...
+ since geom_rug uses the original data and then the check in ScaleDiscrete fails :: 
+ convert data frame used for plotting purposes accordingly
+- use proper dependence on irlba now that it's on CRAN   
 
 hi prio, much wrk:
-
 - vignette:  add more examples on popular datasets?
 - clean up weights/scales confusion for gaussian to allow for weighted regression 
 - plot mrf with igraph/Rgraphviz? can we do it in ggplot2?
 - implement semiparametric terms that are "always included" (i.e. setting w=1 for some terms)  
-- intercept in every update block 
+- intercept in every update block / update intercept with each block 
 
 lo prio, little wrk:
 - restartChains
@@ -26,37 +29,15 @@ lo prio, much wrk:
 - don't update iwls weights in every iteration? 
 - improve plots for lin (just plot estimated beta, not eta) and its interactions 
 
-if it ever arrives on CRAN:
-- add proper irlba dependence 
-
-
-roadmap:
+eventually:
 - redo ssGAMdesign completely formula/parser based (NO fucking grep)
-- implement terms & interactions as proto objects with visualization/prediction methods etc instead of clumsy 
-	custom environments
 - use Rcpp for updaters
 - sparse matrix updates for rnd/mrf ?
 - do updates cycling over terms instead of over parameter blocks? 
 	(i.e. update (gamma_1, tau_1, beta_1)-->...-->(gamma_p, tau_p, beta_p) instead of (gamma_1,..,p)-->(tau_1,..,p)-->(beta_1,..,p) )  
 	if we do this, use compressed designs with unique values only as in bayesX/mboost?
 	will probably mean more autocorr since we take smaller steps on the posterior
+- improve mixing by switching parameter blocks between chains? 
+	(i.e. every 500 iterations, exchange parts of parameter vector between chains...)
 
 
-
-
-library(roxygen)
-roxygenize("Z:/RegularBayes/Workspace/spikeSlabGAM/pkg", use.Rd2=TRUE, unlink.target = TRUE)
-R CMD Rd2dvi --verbose --pdf --output=/home/fabians/tmp/ssGAM_man.pdf ~/RegularBayes/Workspace/spikeSlabGAM/pkg.roxygen  --no-clean
-R CMD check ~/RegularBayes/Workspace/spikeSlabGAM/pkg  
-R CMD build ~/RegularBayes/Workspace/spikeSlabGAM/pkg
-
-
-helpFiles <- list.files("~/RegularBayes/Workspace/spikeSlabGAM/pkg/man", pattern=".Rd")
-sapply(1:length(helpFiles), function(i){
-			system(paste("R CMD Rdconv --type=\"latex\" --output=~/Tex/Diss/src/man/", 
-							sub(".Rd", ".tex", helpFiles[i]) , " ~/RegularBayes/Workspace/spikeSlabGAM/pkg/man/", helpFiles[i], sep=""))
-		})
-
-
-install.packages("~/RegularBayes/Workspace/spikeSlabGAM/spikeSlabGAM_0.9.tar.gz", repos=NULL, type="source")  
-install.packages("~/RegularBayes/Workspace/spikeSlabGAM/pkg", repos=NULL, type="source")  

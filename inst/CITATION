@@ -6,14 +6,15 @@
      vers <- paste("R package version", desc$Version)
     
      citEntry(entry="Article",
-              title = "spikeSlabGAM: Bayesian Variable Selection, Model Choice and Regularization for Generalized
-    Additive Mixed Models in R",
-              author = "Fabian Scheipl",
-              year = "2011",
-              note = "under revision",
+              title = "spikeSlabGAM: Bayesian Variable Selection, Model Choice and Regularization for Generalized Additive Mixed Models in R",
+              author = personList(as.person("Fabian Scheipl")),
               journal = "Journal of Statistical Software",
-              number= " ",
-              volume= " ",
-              pages= " ",
-              textVersion = "Scheipl, F. (2011), spikeSlabGAM: Bayesian Variable Selection, Model Choice and Regularization for Generalized
-    Additive Mixed Models in R. Journal of Statistical Software, under revision")               
+ 			  year = "2011",
+ 			  volume = "43",
+ 			  number = "14",
+ 			  pages = "1--24",
+ 			  url = "http://www.jstatsoft.org/v43/i14/",
+              textVersion = paste("Fabian Scheipl (2011).",
+               "spikeSlabGAM: Bayesian Variable Selection, Model Choice and Regularization for Generalized Additive Mixed Models in R.",
+               "Journal of Statistical Software, 43(14), 1--24."),
+     )               

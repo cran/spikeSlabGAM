@@ -458,7 +458,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 						#num:factor
 						aesAggrStr <- aes_string(x=vars[nums], y=aggregateStr, col=vars[!nums])
 						plotElems <- c(geom_line(aesAggrStr), 
-								geom_rug(data=m$data, aes_string(x=vars[nums], col=vars[!nums], y=NULL), alpha=alphaRug),
+								geom_rug(data=m$data, aes_string(x=vars[nums], col=paste("as.factor(",vars[!nums],")"), y=NULL), alpha=alphaRug),
 								list(ylab(expression(eta))),
 								plotElems)
 						if(plotCR){
@@ -532,7 +532,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 					#fct:fct:num
 					aesAggrStr <- aes_string(x=vars[3], y=aggregateStr, col=vars[2])
 					plotElems <- c(geom_line(aesAggrStr),
-							geom_rug(data=m$data, aes_string(x=vars[3], col=vars[2], y=NULL), alpha=alphaRug),
+							geom_rug(data=m$data, aes_string(x=vars[3], col=paste("as.factor(",vars[2],")"), y=NULL), alpha=alphaRug),
 							plotElems)
 					if(plotCR){
 						aesCRStr <- aes_string(x=vars[3], ymin=quantileStr[1], ymax=quantileStr[2], fill=vars[2])
@@ -576,7 +576,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 #' @param aggregate (function) which summary statistic to use for the posterior of the model terms. Defaults to the mean.
 #' @param quantiles which quantiles to use for the borders of credible regions. Defaults to 10\% and 90\% percentiles. 
 #' 	Set to NULL to omit plotting credible regions.
-#' @param gridlength length of the (univariate) grids for the covariates on which to evaluate the posterior. Defaults to 40. 
+#' @param gridlength length of the (univariate) grids for the covariates on which to evaluate the posterior. Defaults to 20. 
 #' @param base_size default base font size for plot (see e.g. \code{\link[ggplot2]{theme_gray}})
 #' @param ggElems a list of plot elements to give to \code{ggplot}. Use this to supply custom themes or colors,  
 #' 	fortify the plot(s) with partial residuals etc.  

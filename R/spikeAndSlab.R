@@ -357,7 +357,7 @@ spikeAndSlab <- function(
 	)
 	## allow start close to origin (start in exact null not possible because divide-by-zero) 
 	if(!is.null(start$beta)){
-		if(sum(abs(start$beta))==0) start$beta <- matrix(runif(q*mcmc$nChains, -.01, .01), nr=q)
+		if(sum(abs(start$beta))==0) start$beta <- matrix(runif(q*mcmc$nChains, -.01, .01), nrow=q)
 	}
 	
 	start <- modifyList(defaultStart, start)
@@ -461,10 +461,10 @@ spikeAndSlab <- function(
 
 	pcts <- round(quantile(mcmc$burnin:mcmc$totalLength, seq(.1,.9,by=.1)))
 	
-	betaMat <- ksiMat <- matrix(0, nr=mcmc$chainLength, nc = model$q)
-	tau2Mat <- gammaMat <- probV1Mat <- matrix(0, nr=mcmc$chainLength, nc = model$nPenGrps)
-	alphaMat <- matrix(0, nr=mcmc$chainLength, nc = model$nGroups)
-	wMat <- likMat <- logPostMat <- sigma2Mat <- matrix(0, nr=mcmc$chainLength, nc = 1)
+	betaMat <- ksiMat <- matrix(0, nrow=mcmc$chainLength, ncol = model$q)
+	tau2Mat <- gammaMat <- probV1Mat <- matrix(0, nrow=mcmc$chainLength, ncol = model$nPenGrps)
+	alphaMat <- matrix(0, nrow=mcmc$chainLength, ncol=model$nGroups)
+	wMat <- likMat <- logPostMat <- sigma2Mat <- matrix(0, nrow=mcmc$chainLength, ncol=1)
 	
 	parallel <- if(suppressWarnings(require(multicore, quietly = TRUE))){
 				"multicore"
@@ -623,9 +623,9 @@ spikeAndSlab <- function(
 					#if(mcmc$verbose) cat("\nsampling y from posterior predictive...\n")
 					mu <- X %*% t(samples$beta) + model$offset
 					yPred <- switch(familystr,
-							gaussian = mu + t(as.vector(sqrt(samples$sigma2)) * matrix(rnorm(n*mcmc$chainLength), nr=mcmc$chainLength)),
-							binomial = t(matrix(rbinom(n * mcmc$chainLength, model$scale, plogis(mu)), nr=mcmc$chainLength)),
-							poisson = t(matrix(rpois(n * mcmc$chainLength, exp(mu)), nr=mcmc$chainLength)) 
+							gaussian = mu + t(as.vector(sqrt(samples$sigma2)) * matrix(rnorm(n*mcmc$chainLength), nrow=mcmc$chainLength)),
+							binomial = t(matrix(rbinom(n * mcmc$chainLength, model$scale, plogis(mu)), nrow=mcmc$chainLength)),
+							poisson = t(matrix(rpois(n * mcmc$chainLength, exp(mu)), nrow=mcmc$chainLength)) 
 					)
 					list(mu = mu, y=yPred)		
 				} else NULL
@@ -748,7 +748,7 @@ spikeAndSlab <- function(
 	ret$DIC <- {
 		Dbar <- -2 * mean(unlist(ret$samples$logLik), na.rm=T)
 		Dhat <- -2 * switch(familystr,
-				gaussian = sum(dnorm(y - X%*%ret$postMeans$beta, m=0, sd= sqrt(ret$postMeans$sigma2), log=T)),
+				gaussian = sum(dnorm(y - X%*%ret$postMeans$beta, mean=0, sd= sqrt(ret$postMeans$sigma2), log=T)),
 				binomial = sum(dbinom(y*model$scale, model$scale, plogis(X%*%ret$postMeans$beta), log=T)),
 				poisson =  sum(dpois(y, exp(X%*%ret$postMeans$beta), log=T)))
 		pD <- Dbar - Dhat

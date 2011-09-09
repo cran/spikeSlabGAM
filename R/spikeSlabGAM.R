@@ -56,6 +56,8 @@
 #' @seealso \code{\link{ssGAMDesign}} for details on model specification, \code{\link{spikeAndSlab}} for more details on the MCMC sampler and prior specification,
 #'  and \code{\link{ssGAM2Bugs}} for MCMC diagnostics. Check out the vignette for theoretical background and code examples. 
 #' @author Fabian Scheipl
+#' @references Fabian Scheipl (2011). \code{spikeSlabGAM}: Bayesian Variable Selection, Model Choice and Regularization for Generalized Additive Mixed Models in R. 
+#' \emph{Journal of Statistical Software}, \bold{43}(14), 1--24.
 #' @export
 #' @examples
 #' 
