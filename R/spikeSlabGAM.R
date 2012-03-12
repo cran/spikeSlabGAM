@@ -48,13 +48,15 @@
 #' @param family (character) the family of the response, defaults to normal/Gaussian response, \code{"poisson"} and \code{"binomial"} are implemented as well.
 #' @param hyperparameters A list of arguments specifying the prior settings. See \code{\link{spikeAndSlab}}.
 #' @param model A list of arguments describing the model structure. See \code{\link{spikeAndSlab}}. 
-#' User-supplied \code{groupIndicators} and \code{H} entries will be overwritten by \code{\link{ssGAMDesign}}.
+#'  User-supplied \code{groupIndicators} and \code{H} entries will be overwritten by \code{\link{ssGAMDesign}}.
 #' @param mcmc A list of arguments specifying MCMC sampler options. See \code{\link{spikeAndSlab}}. 
-#' @param start A list of starting values for the MCMC sampler. See \code{\link{spikeAndSlab}}.
+#' @param start A list of starting values for the MCMC sampler. See \code{\link{spikeAndSlab}}. 
+#'  Use \code{start=list(seed=<YOUR_SEED>)} to set the RNG seed for reproducible results.  
 #' @return an object of class \code{spikeSlabGAM} with methods 
-#' 	\code{\link{summary.spikeSlabGAM}},  \code{\link{predict.spikeSlabGAM}}, and \code{\link{plot.spikeSlabGAM}}. 
+#' 	\code{\link{summary.spikeSlabGAM}}, \code{\link{predict.spikeSlabGAM}}, and \code{\link{plot.spikeSlabGAM}}. 
 #' @seealso \code{\link{ssGAMDesign}} for details on model specification, \code{\link{spikeAndSlab}} for more details on the MCMC sampler and prior specification,
-#'  and \code{\link{ssGAM2Bugs}} for MCMC diagnostics. Check out the vignette for theoretical background and code examples. 
+#'  and \code{\link{ssGAM2Bugs}} for MCMC diagnostics. Check out the vignette for 
+#'  theoretical background and code examples. 
 #' @author Fabian Scheipl
 #' @references Fabian Scheipl (2011). \code{spikeSlabGAM}: Bayesian Variable Selection, Model Choice and Regularization for Generalized Additive Mixed Models in R. 
 #' \emph{Journal of Statistical Software}, \bold{43}(14), 1--24.

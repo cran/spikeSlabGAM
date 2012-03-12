@@ -1,44 +1,30 @@
-export(ssGAM2Bugs)
 export(arrange.ggplots)
-export(plotTerm)
-S3method(plot, spikeSlabGAM)
-export(getPosteriorTerm)
 export(evalTerm)
-S3method(predict, spikeSlabGAM)
+export(fct)
+export(getPosteriorTerm)
+export(lin)
+export(mrf)
+export(plotTerm)
+export(rnd)
+export(sm)
 export(spikeAndSlab)
 export(spikeSlabGAM)
-export(ssGAMDesign)
-S3method(summary, spikeSlabGAM)
-S3method(print, summary.spikeSlabGAM)
-export(sm)
-export(lin)
-export(fct)
-export(rnd)
-export(u)
-export(mrf)
 export(srf)
+export(ssGAM2Bugs)
+export(ssGAMDesign)
+export(u)
+importFrom(akima,interpp)
+importFrom(cluster,clara)
+importFrom(coda,mcmc)
+importFrom(coda,mcmc.list)
+importFrom(MASS,ginv)
+importFrom(MCMCpack,dinvgamma)
+importFrom(MCMCpack,rinvgamma)
+importFrom(mvtnorm,rmvnorm)
+importFrom(splines,spline.des)
+S3method(plot,spikeSlabGAM)
+S3method(predict,spikeSlabGAM)
+S3method(print,summary.spikeSlabGAM)
+S3method(summary,spikeSlabGAM)
+useDynLib(spikeSlabGAM, sampler)
 
-
-## import used functions from other packages
-
-importFrom(MCMCpack,                    # package
-           dinvgamma, rinvgamma)        # imported functions
-
-importFrom(coda,
-           mcmc, mcmc.list)
-
-importFrom(MASS,
-           ginv)
-
-importFrom(mvtnorm,
-           rmvnorm)
-
-importFrom(splines,
-           spline.des)
-
-importFrom(cluster,
-           clara)
-           
-## register the compiled code function
-useDynLib(spikeSlabGAM,                 			# package
-          sampler)# c

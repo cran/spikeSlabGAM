@@ -31,8 +31,8 @@
 #' @return a basis for a smooth function in x  
 #' @references Kneib, T. (2006). Mixed model based inference in structured additive regression.
 #'   Dr. Hut. \url{http://edoc.ub.uni-muenchen.de/archive/00005011/}
+#' @importFrom splines  spline.des
 #' @export 
-## TODO: add MASS to Depends
 sm <- function(x,  
 		K=min(length(unique(x)),20),
 		spline.degree=3, diff.ord=2, rankZ=.999,
@@ -280,7 +280,7 @@ mrf <- function(x, N, decomposition=c("ortho", "MM"), tol=1e-10, rankZ=.995){
 		for(i in 1:length(lvls)){
 			ind <- which(xnew == lvlMap$lvl[i])
 			if(length(ind)){
-				B[ind, ] <- t(replicate(length(ind), as.matrix(lvlMap[i, -1])))
+				B[ind, ] <- rep(as.numeric(lvlMap[i, -1]), each=length(ind))
 			}	
 		}	
 		return(B)
@@ -325,6 +325,8 @@ mrf <- function(x, N, decomposition=c("ortho", "MM"), tol=1e-10, rankZ=.995){
 #' @author Fabian Scheipl
 #' @return a design matrix for the 2-D spline.     
 #' @references Ruppert, D., Wand, M.P., Carroll, R.J. (2003). Semiparametric Regression. Cambridge University Press 
+#' @importFrom cluster clara
+#' @importFrom akima interpp
 #' @export 
 srf <- function(coords, K=min(50, sum(nd)/4), rankZ=.999, centerBase=TRUE, baseType=c("B", "thinPlate"),
 		decomposition=c("ortho","MM", "asIs"), tol=1e-10){
