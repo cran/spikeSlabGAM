@@ -229,7 +229,7 @@ summarizeF <- function(f, aggregate, quantiles){
 	quant <- if(is.null(quantiles)){
 				NULL
 			} else {
-				t(apply(f, 1, quantile, probs=quantiles, na.rm=TRUE))
+				drop(t(apply(f, 1, quantile, probs=quantiles, na.rm=TRUE)))
 			}	
 	res <- cbind(agg, quant)
 	nm <- list(a = if(!is.null(aggregate)){
@@ -246,20 +246,26 @@ summarizeF <- function(f, aggregate, quantiles){
 	return(res)
 }
 
-# make a 2D-thin plate spline base
-tp2DBasis <- function(coords, K, nd){
+# make a 2D thin plate spline base with K basis functions
+# nd: boolean vector of NonDuplicated locations
+# K: number of basis functions/knots
+# knots: a matrix of coordinates for the knots
+tp2DBasis <- function(coords, K=NULL, nd=rep(TRUE, length(coords)), knots=NULL){
 	get2dKnts <- function(coords, K){
 	# get good knot locations from 5 repeated runs of 
 	# a space-filling algorithm
 	# TODO: use sampled points if coords is large?
-		cl <-lapply(1:5, function(i){
+        cl <-lapply(1:5, function(i){
 					c <- clara(coords, k=K, rngR = TRUE)
 					return(list(obj=c$objective, kn = c$medoids))
 				})
 		return(cl[[which.min(sapply(cl, "[[", "obj"))]]$kn)		
 	}
 	
-	knots <- get2dKnts(coords[nd,, drop=F], K)
+    if(is.null(knots) & is.null(K)) stop("need to specify either K or knots.")
+	if(is.null(knots)) knots <- get2dKnts(coords[nd,, drop=F], K)
+    if(!is.null(knots)) K <- nrow(knots)
+    
 	rK <- dist(knots)
 	P <-  as.matrix(rK^2*log(rK))
 	

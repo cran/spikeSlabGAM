@@ -14,38 +14,45 @@
 #' \code{snow} uses 8.  
 #' 
 #' Details for model specification:
-#' \describe{
-#' \item{\code{hyperparameters}}{\describe{\item{}{A list:}
-#' 		\item{\code{w}}{hyperparameters for the \eqn{Beta}-prior for \eqn{w}; defaults to \code{c(alphaW=1, betaW=1)}, i.e. a uniform distribution.}
-#'		\item{\code{tau2}}{hyperparameters for the \eqn{\Gamma^{-1}}-prior of the hypervariances \eqn{\tau^2}; defaults to \code{c(a1=5, a2=25)}}
-#'		\item{\code{gamma}}{sets \eqn{v_0}, the ratio between the spike and slab variances, defaults to \code{c(v0=0.00025)}}
-#'		\item{\code{sigma2}}{hyperparameters for \eqn{\Gamma^{-1}}-prior for error variance; defaults to \code{c(b1=1e-4, b2=1e-4)}. Only relevant for Gaussian response.}
-#'		\item{\code{varKsi}}{variance for prior of \eqn{\xi}, defaults to 1}
-#'		\item{\code{ksiDF}}{defaults to 0 for a gaussian prior for \eqn{\xi}, else induces a t-prior for \eqn{\xi}} with 
-#' 				 \code{ksiDF} degrees of freedom.}} 
-#' \item{\code{model}}{\describe{\item{}{A list:}
-#' 		\item{\code{groupIndicators}}{a factor that maps the columns of X to the different model terms}
-#'		\item{\code{H}}{a matrix containing the hierarchy of the penalized model terms}
-#'		\item{\code{n}}{number of observations}
-#'		\item{\code{q}}{length of \eqn{\beta}}
-#'		\item{\code{scale}}{scale/weights of the response, defaults to \code{rep(1, n)}, use this to specify number of trials for binomial data}
-#'		\item{\code{offset}}{defaults to \code{rep(0, n)}}}}
-#' \item{\code{mcmc}}{\describe{\item{}{A list:}
-#' 		\item{\code{nChains}}{how many parallel chains to run: defaults to 3}
-#'		\item{\code{chainLength}}{how many samples should be generated per chain, defaults to 500}
-#'		\item{\code{burnin}}{how many initial iterations should be discarded, defaults to 100}
-#'		\item{\code{thin}}{save only every \code{thin}-th iteration, defaults to 5}
-#'		\item{\code{verbose}}{verbose output and  report progress? defaults to TRUE}
-#'		\item{\code{returnSamples}}{defaults to TRUE}
-#'		\item{\code{sampleY}}{generate samples of y and its conditional expectation from posterior predictive? defaults to FALSE}
-#'		\item{\code{useRandomStart}}{use random draw or ridge estimate for beta as starting value? defaults to TRUE, i.e. random starting values.}
-#'		\item{\code{blocksize}}{approx. blocksizes of the updates for \eqn{\alpha, \xi}. Defaults to 50 for gaussian responses and 5/15 for non-gaussian responses.}
-#'		\item{\code{scalemode}}{how to do term-wise rescaling of subvecotrs of \eqn{\xi} in each iteration:  0 means no rescaling, 
-#' 									1 means rescaling s.t. each mean\eqn{(|\xi_g|) = 1},  2 means rescaling s.t. each max\eqn{(|\xi_g|) = 1}}
-#'		\item{\code{modeSwitching}}{probability to do P-IWLS with the mode of the proposal set to the current value, which is useful if the chain gets stuck. 
-#' 									 Defaults to \eqn{0.05}. Increase if accceptance rates are too low.}
-#'		\item{\code{reduceRet}}{don't return data and samples for \eqn{\alpha, \xi, \tau^2}? defaults to FALSE}}}}
-#' 
+#'  \describe{
+#'      \item{\code{hyperparameters}}{\describe{\item{}{A list:}
+#'       \item{\code{w}}{hyperparameters for the \eqn{Beta}-prior for \eqn{w}; defaults to \code{c(alphaW=1, betaW=1)}, i.e. a uniform distribution.}
+#'       \item{\code{tau2}}{hyperparameters for the \eqn{\Gamma^{-1}}-prior of the hypervariances \eqn{\tau^2}; defaults to \code{c(a1=5, a2=25)}}
+#'       \item{\code{gamma}}{sets \eqn{v_0}, the ratio between the spike and slab variances, defaults to \code{c(v0=0.00025)}}
+#'       \item{\code{sigma2}}{hyperparameters for \eqn{\Gamma^{-1}}-prior for error variance; defaults to \code{c(b1=1e-4, b2=1e-4)}. Only relevant for Gaussian response.}
+#'       \item{\code{varKsi}}{variance for prior of \eqn{\xi}, defaults to 1}
+#'       \item{\code{ksiDF}}{defaults to 0 for a gaussian prior for \eqn{\xi}, else induces a t-prior for \eqn{\xi}} with
+#'       \code{ksiDF} degrees of freedom.}}
+#'      \item{\code{model}}{\describe{\item{}{A list:}
+#'       \item{\code{groupIndicators}}{a factor that maps the columns of X to the different model terms}
+#'       \item{\code{H}}{a matrix containing the hierarchy of the penalized model terms}
+#'       \item{\code{n}}{number of observations}
+#'       \item{\code{q}}{length of \eqn{\beta}}
+#'       \item{\code{scale}}{scale/weights of the response, defaults to \code{rep(1, n)}, use this to specify number of trials for binomial data}
+#'       \item{\code{offset}}{defaults to \code{rep(0, n)}}}}
+#'      \item{\code{mcmc}}{\describe{\item{}{A list:}
+#'       \item{\code{nChains}}{how many parallel chains to run: defaults to 3}
+#'       \item{\code{chainLength}}{how many samples should be generated per chain, defaults to 500}
+#'       \item{\code{burnin}}{how many initial iterations should be discarded, defaults to 100}
+#'       \item{\code{thin}}{save only every \code{thin}-th iteration, defaults to 5}
+#'       \item{\code{verbose}}{verbose output and  report progress? defaults to TRUE}
+#'       \item{\code{returnSamples}}{defaults to TRUE}
+#'       \item{\code{sampleY}}{generate samples of y and its conditional expectation from posterior predictive? defaults to FALSE}
+#'       \item{\code{useRandomStart}}{use random draw or ridge estimate for beta as starting value? defaults to TRUE, i.e. random starting values.}
+#'       \item{\code{blocksize}}{approx. blocksizes of the updates for \eqn{\alpha, \xi}. Defaults to 50 for gaussian responses and 5/15 for non-gaussian responses.}
+#'       \item{\code{scalemode}}{how to do term-wise rescaling of subvectors of \eqn{\xi} in each iteration:  0 means no rescaling,
+#'    1 means rescaling s.t. each mean\eqn{(|\xi_g|) = 1},  2 means rescaling s.t. each max\eqn{(|\xi_g|) = 1}}
+#'       \item{\code{modeSwitching}}{probability to do P-IWLS with the mode of the proposal set to the current value, which is useful if the chain gets stuck.
+#'    Defaults to \eqn{0.05}. Increase if accceptance rates are too low.}
+#'       \item{\code{reduceRet}}{don't return data and samples for \eqn{\alpha, \xi, \tau^2}? defaults to FALSE}}}
+#'   \item{\code{start}}{\describe{\item{}{A list:}
+#'       \item{\code{beta}}{starting values for \eqn{\beta}. Defaults to a modified approximate ridge-penalized ML estimate. See vignette for details on default specification.}
+#'       \item{\code{gamma}}{starting values for \eqn{\gamma}. Defaults to a vector of 1's if \code{mcmc$useRandomStart} is \code{FALSE}, otherwise drawn from the prior.}
+#'       \item{\code{tau2}}{starting values for \eqn{\tau^2}. Defaults to the mode of the prior if \code{mcmc$useRandomStart} is \code{FALSE}, otherwise drawn from the prior.}
+#'       \item{\code{sigma2}}{starting values for \eqn{\sigma^2}. Only relevant for Gaussian response. Defaults to the variance of the response divided by the number of covariates if \code{mcmc$useRandomStart} is \code{FALSE}, otherwise drawn from the prior.}
+#'       \item{\code{w}}{starting value for \eqn{w}. Defaults to the mean of the prior if \code{mcmc$useRandomStart} is \code{FALSE}, otherwise drawn from the prior.}
+#'       \item{\code{seed}}{Sets RNG seed for reproducible results. Parallel chains are seeded with this seed incremented by the number of the chain.}}}}
+#'   
 #' @param y response 
 #' @param X design matrix
 #' @param family (character) the family of the response, defaults to normal/Gaussian response
@@ -74,7 +81,7 @@
 #' 	\item{\code{gamma}}{inclusion indicator variables of the model terms}
 #' 	\item{\code{pV1}}{\eqn{P(\gamma=1)}}
 #' 	\item{\code{w}}{hyperparameter for \code{gamma}}
-#' 	\item{\code{sigma2}}{error variance (for gaussian data)}
+#' 	\item{\code{sigma2}}{error variance (for Gaussian data)}
 #' 	\item{\code{logLik}}{log likelihood}
 #' 	\item{\code{logPost}}{log of (unnormalized) posterior}}}
 #' \item{\code{samples}}{a list containing the posterior samples of the parameters, see above for explanation of the entries}
@@ -86,14 +93,21 @@
 #' Normal-Mixture-of-Inverse-Gamma Priors for Bayesian Regularization and Model Selection in Structured Additive Regression Models. 
 #' \emph{LMU Munich, Department of Statistics}: Technical Reports, No.84 (\url{http://epub.ub.uni-muenchen.de/11785/})
 #' @export
+#' @importFrom MASS ginv
+#' @importFrom MCMCpack dinvgamma
+#' @importFrom MCMCpack rinvgamma
+#' @importFrom coda mcmc 
+#' @importFrom coda mcmc.list
+#' @importFrom mvtnorm rmvnorm
+#' @useDynLib spikeSlabGAM sampler 
 spikeAndSlab <- function(
-		y,                         # response (n x 1)
-		X,                         # design matrix with covariates (n x q)
+		y,    # response (n x 1)
+		X,    # design matrix with covariates (n x q)
 		family= c("gaussian","binomial", "poisson"), 
 		hyperparameters=list(),    # prior hyperparameters
-		model=list(),              # model structure
-		mcmc=list(),               # MCMC sampler options
-		start=list()               # start values for the sampler
+		model=list(),       # model structure
+		mcmc=list(),        # MCMC sampler options
+		start=list()        # start values for the sampler
 )
 {
 	
@@ -122,14 +136,14 @@ spikeAndSlab <- function(
 	
 	#### Complete and check parameter lists 
 	#### MCMC 
-	defaultMcmc <-                      # Gibbs sampling options:
+	defaultMcmc <-        # Gibbs sampling options:
 			list(
 					nChains = 3,			#number of chains to run
 					chainLength = 500,     # length of the output markov chain 
-					burnin = 100,           # how many starting samples are
+					burnin = 100,    # how many starting samples are
 					# discarded?
-					thin = 5,                 # only every thin'th sample is retained for the output chain 
-					verbose = TRUE,           # should information on progress etc been given?
+					thin = 5,   # only every thin'th sample is retained for the output chain 
+					verbose = TRUE,    # should information on progress etc been given?
 					returnSamples = TRUE,      # return the samples as a list of mcmc objects?
 					sampleY = FALSE,		   # sample Y from posterior predictive?		
 					useRandomStart = TRUE,    # use ridge estimate for beta as starting value or use random draw?
@@ -260,7 +274,7 @@ spikeAndSlab <- function(
 			list(
 					w = c(alphaW=1, betaW=1),   # w ~ Beta(alphaW, betaW)
 					tau2 = c(a1=5, a2=25), 		# tau^{2} ~ IG(a1, b1) 
-					gamma = c(v0=0.00025),        # ratio spike/slab variance
+					gamma = c(v0=0.00025), # ratio spike/slab variance
 					# variance
 					sigma2 = c(b1=1e-4, b2=1e-4), # sigma^2 ~ IG(b1, b2)
 					varKsi = rep(1,model$qKsiUpdate), #only relevant if ksiDF>0
@@ -347,9 +361,9 @@ spikeAndSlab <- function(
 	
 	
 	
-	defaultStart <-  list(                 # start values for the Gibbs sampler:
+	defaultStart <-  list(   # start values for the Gibbs sampler:
 			beta = beta, 
-			gamma = gamma,        
+			gamma = gamma, 
 			tau2 = tau2,
 			sigma2 = sigma2,
 			w = w,
@@ -563,7 +577,7 @@ spikeAndSlab <- function(
 				sigma2Mat=  as.double(sigma2Mat),
 				wMat=  as.double(wMat),
 				likMat= as.double(likMat),
-				logPostMat= as.double(logPostMat))#, PACKAGE="spikeSlabGAM")
+				logPostMat= as.double(logPostMat), PACKAGE="spikeSlabGAM")
 		
 
 		beta <- matrix(res$betaMat, mcmc$chainLength, model$q)[,model$reverseOrder]
@@ -653,15 +667,15 @@ spikeAndSlab <- function(
 	
 	
 	if(parallel=="multicore") {
-		res <- mclapply(1:mcmc$nChains, do1Chain)
+		res <- multicore:::mclapply(1:mcmc$nChains, do1Chain)
 	} 
 	if(parallel=="snow"){
 		clusterExportLocal <-  function (cl, list){
 			for (name in list) {
-				clusterCall(cl, assign, name, get(name, pos = -1))
+				snow:::clusterCall(cl, assign, name, get(name, pos = -1))
 			}
 		}
-		cl <- makeCluster(options()$cores, type = "SOCK")
+		cl <- snow:::makeCluster(options()$cores, type = "SOCK")
 		clusterExportLocal(cl,
 				c("hyperparameters","model","start","mcmc","y","X",
 						"blocksAlpha","alphaIndABegin","alphaIndAEnd",
@@ -669,8 +683,8 @@ spikeAndSlab <- function(
 						"betaMat", "alphaMat", "ksiMat", "gammaMat", "probV1Mat",
 						"tau2Mat", "sigma2Mat", "wMat", "likMat", "logPostMat","unpen",
 						"familystr"))
-		res <- parLapply(cl, as.list(1:mcmc$nChains), do1Chain)
-		stopCluster(cl)
+		res <- snow:::parLapply(cl, as.list(1:mcmc$nChains), do1Chain)
+		snow:::stopCluster(cl)
 	}
 	if(parallel=="none"){	
 		res <- lapply(1:mcmc$nChains, function(x) {

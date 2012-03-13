@@ -175,6 +175,10 @@ predict.spikeSlabGAM <- function(object, newdata=NULL, type=c("response", "link"
 		terms <- if(type != "terms" | is.null(terms)){
 					names(object$predvars)
 				} else {
+                    #check for special terms
+                    specials <- sapply(terms, 
+                            function(x) any(mapply(grepl, x=x, pattern=environment(object$formula)$specials))) 
+                    #find out terms that involve variables mentioned in non-special "terms" 
 					which <- unique(unlist(sapply(terms, grep, x=names(object$predvars), fixed=TRUE)))
 					names(object$predvars)[sort(which)]
 				}

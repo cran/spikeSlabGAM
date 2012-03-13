@@ -39,11 +39,11 @@ arrange.ggplots <- function(...,
 		
 		
 		safeEditGrob <- function(.g, what){
-			thisGrob <- getGrob(.g, what, grep=TRUE)
+			thisGrob <- grid:::getGrob(.g, what, grep=TRUE)
 			if(is.null(thisGrob)){
 				return(ggplot2:::.zeroGrob)
 			} else {
-				return(editGrob(thisGrob, vp=NULL))
+				return(grid:::editGrob(thisGrob, vp=NULL))
 			}
 		}
 		dots <- lapply(lstAll, function(.g) ggplotGrob(.g[[1]]))
@@ -54,17 +54,17 @@ arrange.ggplots <- function(...,
 		plottitles <- lapply(dots, function(.g) safeEditGrob(.g,"plot.title.text"))
 		
 		legends <- lapply(dots, function(.g) if(!is.null(.g$children$legends))
-						editGrob(.g$children$legends, vp=NULL) else ggplot2:::.zeroGrob)
+						grid:::editGrob(.g$children$legends, vp=NULL) else ggplot2:::.zeroGrob)
 		
-		widths.left <- mapply(`+`, e1=lapply(ytitles, grobWidth),
-				e2= lapply(ylabels, grobWidth), SIMPLIFY=FALSE)
-		widths.right <- lapply(legends, grobWidth)
-		heights.top <- lapply(plottitles, grobHeight)
-		# heights.top <- lapply( plottitles, function(x) unit(0,"cm") )
-		heights.bottom <- mapply(`+`, e1=lapply(xtitles, grobHeight),
-				e2= lapply(xlabels, grobHeight), SIMPLIFY=FALSE)
+		widths.left <- mapply(`+`, e1=lapply(ytitles, grid:::grobWidth),
+				e2= lapply(ylabels, grid:::grobWidth), SIMPLIFY=FALSE)
+		widths.right <- lapply(legends, grid:::grobWidth)
+		heights.top <- lapply(plottitles, grid:::grobHeight)
+		# heights.top <- lapply( plottitles, function(x) grid:::unit(0,"cm") )
+		heights.bottom <- mapply(`+`, e1=lapply(xtitles, grid:::grobHeight),
+				e2= lapply(xlabels, grid:::grobHeight), SIMPLIFY=FALSE)
 		for(i in which(!align)) widths.left[[i]] <- widths.right[[i]] <-
-					heights.top[[i]] <- heights.bottom[[i]] <- unit(0, "cm") 
+					heights.top[[i]] <- heights.bottom[[i]] <- grid:::unit(0, "cm") 
 		
 		for ( i in seq_along( lstAll ) ) {
 			lstCur <- lstAll[[i]]
@@ -72,26 +72,26 @@ arrange.ggplots <- function(...,
 			# Left
 			valNew <- widths.left[[ i ]]
 			valOld <- stats.col[[ min(lstCur[[3]]) ]]$widths.left.max
-			if ( is.null( valOld ) ) valOld <- unit( 0, "cm" )
-			stats.col[[ min(lstCur[[3]]) ]]$widths.left.max <- max( do.call( unit.c, list(valOld, valNew) ) )
+			if ( is.null( valOld ) ) valOld <- grid:::unit( 0, "cm" )
+			stats.col[[ min(lstCur[[3]]) ]]$widths.left.max <- max( do.call( grid:::unit.c, list(valOld, valNew) ) )
 			
 			# Right
 			valNew <- widths.right[[ i ]]
 			valOld <- stats.col[[ max(lstCur[[3]]) ]]$widths.right.max
-			if ( is.null( valOld ) ) valOld <- unit( 0, "cm" )
-			stats.col[[ max(lstCur[[3]]) ]]$widths.right.max <- max( do.call( unit.c, list(valOld, valNew) ) )
+			if ( is.null( valOld ) ) valOld <- grid:::unit( 0, "cm" )
+			stats.col[[ max(lstCur[[3]]) ]]$widths.right.max <- max( do.call( grid:::unit.c, list(valOld, valNew) ) )
 			
 			# Top
 			valNew <- heights.top[[ i ]]
 			valOld <- stats.row[[ min(lstCur[[2]]) ]]$heights.top.max
-			if ( is.null( valOld ) ) valOld <- unit( 0, "cm" )
-			stats.row[[ min(lstCur[[2]]) ]]$heights.top.max <- max( do.call( unit.c, list(valOld, valNew) ) )
+			if ( is.null( valOld ) ) valOld <- grid:::unit( 0, "cm" )
+			stats.row[[ min(lstCur[[2]]) ]]$heights.top.max <- max( do.call( grid:::unit.c, list(valOld, valNew) ) )
 			
 			# Bottom
 			valNew <- heights.bottom[[ i ]]
 			valOld <- stats.row[[ max(lstCur[[2]]) ]]$heights.bottom.max
-			if ( is.null( valOld ) ) valOld <- unit( 0, "cm" )
-			stats.row[[ max(lstCur[[2]]) ]]$heights.bottom.max <- max( do.call( unit.c, list(valOld, valNew) ) )
+			if ( is.null( valOld ) ) valOld <- grid:::unit( 0, "cm" )
+			stats.row[[ max(lstCur[[2]]) ]]$heights.bottom.max <- max( do.call( grid:::unit.c, list(valOld, valNew) ) )
 		}
 		
 		for(i in seq_along(dots)){
@@ -100,30 +100,30 @@ arrange.ggplots <- function(...,
 			nWidthRightMax <- stats.col[[ max( lstCur[[ 3 ]] ) ]]$widths.right.max
 			nHeightTopMax <- stats.row[[ min( lstCur[[ 2 ]] ) ]]$heights.top.max
 			nHeightBottomMax <- stats.row[[ max( lstCur[[ 2 ]] ) ]]$heights.bottom.max
-			pushViewport( viewport( layout.pos.row=lstCur[[2]],
+            grid:::pushViewport(grid:::viewport( layout.pos.row=lstCur[[2]],
 							layout.pos.col=lstCur[[3]], just=c("left","top") ) )
-			pushViewport(viewport(
-							x=unit(0, "npc") + nWidthLeftMax - widths.left[[i]],
-							y=unit(0, "npc") + nHeightBottomMax - heights.bottom[[i]],
-							width=unit(1, "npc") - nWidthLeftMax + widths.left[[i]] -
+            grid:::pushViewport(grid:::viewport(
+							x=grid:::unit(0, "npc") + nWidthLeftMax - widths.left[[i]],
+							y=grid:::unit(0, "npc") + nHeightBottomMax - heights.bottom[[i]],
+							width=grid:::unit(1, "npc") - nWidthLeftMax + widths.left[[i]] -
 									nWidthRightMax + widths.right[[i]],
-							height=unit(1, "npc") - nHeightBottomMax + heights.bottom[[i]] -
+							height=grid:::unit(1, "npc") - nHeightBottomMax + heights.bottom[[i]] -
 									nHeightTopMax + heights.top[[i]],
 							just=c("left","bottom")))
-			grid.draw(dots[[i]])
-			upViewport(2)
+            grid:::grid.draw(dots[[i]])
+            grid:::upViewport(2)
 		}
 	}
 	
 	dots <- list(...)
-	gl <- grid.layout(nrow=max(unlist(rows)),ncol=max(unlist(cols)), 
+	gl <- grid:::grid.layout(nrow=max(unlist(rows)),ncol=max(unlist(cols)), 
 			widths=widths, 	heights=heights)
 	ddots <- mapply(function(p, r, c){
 				return(list(p, r, c))
 			}, p=dots, r=rows, c=cols, SIMPLIFY=FALSE)
 	
-	grid.newpage()
-	pushViewport(viewport(layout=gl)) 
+    grid:::grid.newpage()
+    grid:::pushViewport(grid:::viewport(layout=gl)) 
 	align.plots(gl, ddots)
 }
 
@@ -134,7 +134,7 @@ arrange.ggplots <- function(...,
 #' Regions where the pointwise credible intervals do not contain zero are plotted in muted red (\eqn{>0}) and blue (\eqn{< 0}), overlaid
 #' by coloured contour lines that show the \code{aggregate} values.  Contour lines are shown only inside the convex hull 
 #' of the original observations.
-#' Plots for \code{link{srf}}:\code{link{lin}} terms 
+#' Plots for \code{\link{srf}}:\code{\link{lin}} terms 
 #' show the spatially varying coefficient, i.e. the contour lines represent the change in the linear predictor when the \code{lin}-covariate
 #' increases by 1 standard deviation. For this reason, a cumulative plot makes no sense and the routine will 
 #' set \code{cumulative=FALSE} with a warning.  
@@ -293,14 +293,14 @@ plotTerm <- function(label, m, cumulative=TRUE,
 			nms <-  names(xu[[1]])		
 			aesStr <- aes_string(x=nms[1], y=nms[2], z=aggregateStr, colour="..level..")
 			plotElems <- c(geom_contour(data=data, mapping=aesStr, bins=nBins),
-					scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred')),
+					list(scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred'))),
 					geom_point(data=m$data, mapping=aes_string(x=nms[1], y=nms[2]), alpha=alphaRug, size=.5),
 					plotElems)
 			if(plotCR){
 				data$sign <- ifelse(apply(data[,2:3],1, prod)>0, sign(data[,3]), 0)
 				plotElems <- c(geom_tile(data=data, aes_string(x=nms[1], y=nms[2], fill="sign"), colour=NA, alpha=.1),
-						scale_fill_gradient2(name="CI", low =  muted('darkblue'), mid = 'white', high = muted('darkred'),
-								breaks=c(-1,1), labels=c("< 0","> 0"), alpha=.1), 
+						list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1)),
+								breaks=c(-1,1), labels=c("< 0","> 0"))), 
 						plotElems)
 				
 			} 
@@ -312,14 +312,14 @@ plotTerm <- function(label, m, cumulative=TRUE,
 			plotElems <- c(
 					facet_grid(eval(substitute(formula( ~ .a), list(.a=as.name(names(fcts)[fcts])))), labeller=label_both),	
 					geom_contour(data=data, mapping=aesStr, bins=nBins),
-					scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred')),
+					list(scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred'))),
 					geom_point(data=m$data, mapping=aes_string(x=nms[1], y=nms[2]), alpha=alphaRug, size=.2),
 					plotElems)
 			if(plotCR){
 				data$sign <- ifelse(apply(data[,2:3],1, prod)>0, sign(data[,3]), 0)
 				plotElems <- c(geom_tile(data=data, aes_string(x=nms[1], y=nms[2], fill="sign"), colour=NA, alpha=.1),
-						scale_fill_gradient2(name="CI", low =  muted('darkblue'), mid = 'white', high = muted('darkred'),
-								breaks=c(-1,1), labels=c("< 0","> 0"), alpha=.1), 
+						list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1))),
+								breaks=c(-1,1), labels=c("< 0","> 0")), 
 						plotElems)
 			}
 		} 
@@ -330,14 +330,14 @@ plotTerm <- function(label, m, cumulative=TRUE,
 			linLabel <- parse(text=paste("frac(partialdiff*eta, partialdiff*",nmLin,")*sd(",nmLin,")"))
 			aesStr <- aes_string(x=nms[1], y=nms[2], z=aggregateStr, colour="..level..")
 			plotElems <- c(geom_contour(data=data, mapping=aesStr, bins=nBins),
-					scale_colour_gradient2(name=linLabel, low =  muted('darkblue'), mid = 'grey80', high = muted('darkred')),
+					list(scale_colour_gradient2(name=linLabel, low =  muted('darkblue'), mid = 'grey80', high = muted('darkred'))),
 					geom_point(data=m$data, mapping=aes_string(x=nms[1], y=nms[2]), alpha=alphaRug, size=.5),
 					plotElems)
 			if(plotCR){
 				data$sign <- ifelse(apply(data[,2:3],1, prod)>0, sign(data[,3]), 0)
 				plotElems <- c(geom_tile(data=data, aes_string(x=nms[1], y=nms[2], fill="sign"), colour=NA, alpha=.1),
-						scale_fill_gradient2(name="CI", low =  muted('darkblue'), mid = 'white', high = muted('darkred'),
-								breaks=c(-1,1), labels=c("< 0","> 0"), alpha=.1), 
+						list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1))),
+								breaks=c(-1,1), labels=c("< 0","> 0")), 
 						plotElems)	 
 			}
 		}
@@ -352,14 +352,14 @@ plotTerm <- function(label, m, cumulative=TRUE,
 				plotElems <- c(
 						facet_grid(eval(substitute(formula(.b ~ .a), list(.a=as.name(names(fcts)[fcts][1]), .b=as.name(names(fcts)[fcts][2])))), labeller=label_both),	
 						geom_contour(data=data, mapping=aesStr, bins=nBins),
-						scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred')),
+						list(scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred'))),
 						geom_point(data=m$data, mapping=aes_string(x=nms[1], y=nms[2]), alpha=alphaRug, size=.2),
 						plotElems)
 				if(plotCR){
 					data$sign <- ifelse(apply(data[,2:3],1, prod)>0, sign(data[,3]), 0)
 					plotElems <- c(geom_tile(data=data, aes_string(x=nms[1], y=nms[2], fill="sign"), colour=NA, alpha=.1),
-							scale_fill_gradient2(name="CI", low =  muted('darkblue'), mid = 'white', high = muted('darkred'),
-									breaks=c(-1,1), labels=c("< 0","> 0"), alpha=.1), 
+							list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1)),
+									breaks=c(-1,1), labels=c("< 0","> 0"))), 
 							plotElems)
 				}
 		}	
@@ -371,15 +371,15 @@ plotTerm <- function(label, m, cumulative=TRUE,
 			plotElems <- c(
 					facet_grid(eval(substitute(formula(. ~ .a), list(.a=as.name(names(fcts)[fcts])))), labeller=label_both),
 					geom_contour(data=data, mapping=aesStr, bins=nBins),
-					scale_colour_gradient2(name=linLabel, low =  muted('darkblue'), mid = 'grey80', high = muted('darkred')),
+					list(scale_colour_gradient2(name=linLabel, low =  muted('darkblue'), mid = 'grey80', high = muted('darkred'))),
 					geom_point(data= m$data, mapping=aes_string(x=nms[1], y=nms[2]), alpha=alphaRug),
 					plotElems)
 			if(plotCR){
 				data$sign <- ifelse(apply(data[,2:3],1, prod)>0, sign(data[,3]), 0)
 				plotElems <- c(
 						geom_tile(data=data, aes_string(x=nms[1], y=nms[2], fill="sign"), colour=NA, alpha=.1),
-						scale_fill_gradient2(name="CI", low =  muted('darkblue'), mid = 'white', high = muted('darkred'),
-								breaks=c(-1,1), labels=c("< 0","> 0"), alpha=.1), 
+						list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1)),
+								breaks=c(-1,1), labels=c("< 0","> 0"))), 
 						plotElems)	 
 			}
 		} 
@@ -479,14 +479,14 @@ plotTerm <- function(label, m, cumulative=TRUE,
 					
 					aesStr <- aes_string(x=vars[1], y=vars[2], z=aggregateStr, colour="..level..")
 					plotElems <- c(geom_contour(data=data[keep, ], mapping=aesStr, bins=nBins),
-							scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred')),
+							list(scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred'))),
 							geom_rug(data=rugdata, mapping=aes_string(x=vars[1], y=vars[2]), alpha=alphaRug),
 							plotElems)
 					if(plotCR){
 						data$sign <- ifelse(apply(data[,4:5],1, prod)>0, sign(data[,5]), 0)
 						plotElems <- c(geom_tile(data=data, aes_string(x=vars[1], y=vars[2], fill="sign"), colour=NA, alpha=.1),
-								scale_fill_gradient2(name="CI", low =  muted('darkblue'), mid = 'white', high = muted('darkred'),
-										breaks=c(-1,1), labels=c("< 0","> 0"), alpha=.1), 
+								list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1)),
+										breaks=c(-1,1), labels=c("< 0","> 0"))), 
 								plotElems)
 						
 					} 
@@ -512,15 +512,15 @@ plotTerm <- function(label, m, cumulative=TRUE,
 					
 					aesStr <- aes_string(x=vars[2], y=vars[3], z=aggregateStr, colour="..level..")
 					plotElems <- c(geom_contour(data=data[keep, ], mapping=aesStr, bins=nBins),
-							scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred')),
+							list(scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred'))),
 							geom_rug(data=rugdata, mapping=aes_string(x=vars[2], y=vars[3]), alpha=alphaRug),
 							plotElems)
 					
 					if(plotCR){
 						data$sign <- ifelse(apply(data[,5:6],1, prod)>0, sign(data[,5]), 0)
 						plotElems <- c(geom_tile(data=data, aes_string(x=vars[2], y=vars[3], fill="sign"), colour=NA,  alpha=.1),
-								scale_fill_gradient2(name="CI", low =  muted('darkblue'), mid = 'white', high = muted('darkred'),
-										breaks=c(-1,1), labels=c("< 0","> 0"), alpha=.1), 
+                                list(scale_fill_gradient2(name="CI", low =  alpha(muted('darkblue'), .1), mid = alpha('white', .1), 
+                                        high = alpha(muted('darkred'), .1), breaks=c(-1,1), labels=c("< 0","> 0"))), 
 								plotElems)
 					}
 					plotElems <- c(facet_grid(eval(substitute(formula( ~ .a), list(.a=as.name(vars[1])))), labeller=label_both), plotElems)
