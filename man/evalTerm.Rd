@@ -3,7 +3,7 @@
 \title{Get summaries of the posterior (predictive) distribution of the linear predictor of a model term}
 \usage{
   evalTerm(label, model, newdata = NULL, aggregate = mean,
-  quantiles = c(0.1, 0.9), returnData = TRUE)
+    quantiles = c(0.1, 0.9), returnData = TRUE)
 }
 \arguments{
   \item{label}{(character) the label of one of the terms in
@@ -12,8 +12,8 @@
   \item{model}{a \code{spikeSlabGAM} object}
 
   \item{newdata}{\code{data.frame} on which to evaluate
-  \code{label}. Defaults to NULL, in which case the term is
-  evaluated on the original data.}
+  \code{label}.  Defaults to NULL, in which case the term
+  is evaluated on the original data.}
 
   \item{aggregate}{(function) a summary statistic that is
   applied over the mcmc-samples of the linear predictor.

@@ -3,8 +3,8 @@
 \title{Print summary for posterior of a \code{spikeSlabGAM} fit}
 \usage{
   \method{print}{summary.spikeSlabGAM} (x, digits = 3,
-  printPGamma = TRUE, printModels = TRUE, showModels =
-  NULL, ...)
+    printPGamma = TRUE, printModels = TRUE,
+    showModels = NULL, ...)
 }
 \arguments{
   \item{x}{an object of class \code{summary.spikeSlabGAM}}

@@ -1,6 +1,9 @@
 #' @include utils.R
 {}
 
+#for R CMD CHECK
+utils::globalVariables(c("nc", "xu"))
+
 #' Generate a reparameterized P-spline base
 #' 
 #' The returned matrix is a low-rank approximation of the original P-spline basis (unless \code{decomposition = "asIs"}),
@@ -32,6 +35,7 @@
 #' @references Kneib, T. (2006). Mixed model based inference in structured additive regression.
 #'   Dr. Hut. \url{http://edoc.ub.uni-muenchen.de/archive/00005011/}
 #' @importFrom splines  spline.des
+#' @importFrom MASS ginv
 #' @export 
 sm <- function(x,  
 		K=min(length(unique(x)),20),

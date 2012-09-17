@@ -3,7 +3,7 @@
 \title{Summary for posterior of a \code{spikeSlabGAM} fit}
 \usage{
   \method{summary}{spikeSlabGAM} (object, threshold = 0.5,
-  ...)
+    ...)
 }
 \arguments{
   \item{object}{an object of class \code{spikeSlabGAM}}

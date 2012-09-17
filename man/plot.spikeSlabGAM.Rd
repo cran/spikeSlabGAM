@@ -2,12 +2,12 @@
 \alias{plot.spikeSlabGAM}
 \title{Generates graphical summaries of a fitted model}
 \usage{
-  \method{plot}{spikeSlabGAM} (x, labels = NULL, cumulative
-  = TRUE, commonEtaScale = FALSE, aggregate = mean,
-  quantiles = c(0.1, 0.9), gridlength = 20, base_size = 12,
-  ggElems = list(), rows = NULL, cols = NULL, widths =
-  NULL, heights = NULL, align = NULL, maxPlotsPerPage = 6,
-  ...)
+  \method{plot}{spikeSlabGAM} (x, labels = NULL,
+    cumulative = TRUE, commonEtaScale = FALSE,
+    aggregate = mean, quantiles = c(0.1, 0.9),
+    gridlength = 20, base_size = 12, ggElems = list(),
+    rows = NULL, cols = NULL, widths = NULL,
+    heights = NULL, maxPlotsPerPage = 6, ...)
 }
 \arguments{
   \item{x}{a fitted \code{spikeSlabGAM} model}
@@ -34,7 +34,7 @@
 
   \item{quantiles}{which quantiles to use for the borders
   of credible regions. Defaults to 10\% and 90\%
-  percentiles. Set to NULL to omit plotting credible
+  percentiles.  Set to NULL to omit plotting credible
   regions.}
 
   \item{gridlength}{length of the (univariate) grids for
@@ -56,23 +56,19 @@
 
   \item{rows}{a list controlling the positioning of the
   various plots on the device. See
-  \code{\link{arrange.ggplots}}}
+  \code{\link[gridExtra]{grid.arrange}}}
 
   \item{cols}{a list controlling the positioning of the
   various plots on the device. See
-  \code{\link{arrange.ggplots}}}
+  \code{\link[gridExtra]{grid.arrange}}}
 
   \item{widths}{a list controlling the positioning of the
   various plots on the device. See
-  \code{\link{arrange.ggplots}}}
+  \code{\link[gridExtra]{grid.arrange}}}
 
   \item{heights}{a list controlling the positioning of the
   various plots on the device. See
-  \code{\link{arrange.ggplots}}}
-
-  \item{align}{a vector controlling the positioning of the
-  various plots on the device. See
-  \code{\link{arrange.ggplots}}. Defaults to no alignment.}
+  \code{\link[gridExtra]{grid.arrange}}}
 
   \item{maxPlotsPerPage}{maximum number of plots rendered
   on a single page/device. Defaults to 9.}
@@ -88,7 +84,9 @@
   This function plots the estimated linear predictors of
   the terms in a model on a grid of values. By default
   displays all 3-way, 2-way interactions and main effects
-  present in the model.
+  present in the model. Starting with ggplot-0.9.2 these
+  are no longer aligned by their axes due to internal
+  changes in grid and ggplot2.
 }
 \note{
   Note that \code{cumulative=TRUE} will only find all

@@ -3,8 +3,8 @@
 \title{Plot the estimated effect of a model term.}
 \usage{
   plotTerm(label, m, cumulative = TRUE, aggregate = mean,
-  quantiles = c(0.1, 0.9), gridlength = 40, contours = 30,
-  ggElems = list())
+    quantiles = c(0.1, 0.9), gridlength = 40,
+    contours = 30, ggElems = list())
 }
 \arguments{
   \item{label}{(character) the label of the effect to be
@@ -19,7 +19,7 @@
   the linear and smooth effect is displayed if TRUE, if
   \code{label} is a factor-factor interaction, the sum of
   both main effects and their interaction is displayed
-  etc.) If FALSE, only the marginal effect of \code{label}
+  etc.)  If FALSE, only the marginal effect of \code{label}
   is displayed.}
 
   \item{aggregate}{(function) which summary statistic to
@@ -39,7 +39,7 @@
 
   \item{ggElems}{a list of plot elements to give to
   \code{\link[ggplot2]{ggplot}}. Use this to supply custom
-  themes, colour schemes etc. Defaults to an empty list,
+  themes, colour schemes etc.  Defaults to an empty list,
   which yields the standard settings.}
 }
 \value{
@@ -57,7 +57,7 @@
   overlaid by coloured contour lines that show the
   \code{aggregate} values.  Contour lines are shown only
   inside the convex hull of the original observations.
-  Plots for \code{link{srf}}:\code{link{lin}} terms show
+  Plots for \code{\link{srf}}:\code{\link{lin}} terms show
   the spatially varying coefficient, i.e. the contour lines
   represent the change in the linear predictor when the
   \code{lin}-covariate increases by 1 standard deviation.

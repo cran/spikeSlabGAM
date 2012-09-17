@@ -2,9 +2,10 @@
 \alias{spikeAndSlab}
 \title{Set up and sample a spike-and-slab prior model.}
 \usage{
-  spikeAndSlab(y, X, family = c("gaussian", "binomial",
-  "poisson"), hyperparameters = list(), model = list(),
-  mcmc = list(), start = list())
+  spikeAndSlab(y, X,
+    family = c("gaussian", "binomial", "poisson"),
+    hyperparameters = list(), model = list(),
+    mcmc = list(), start = list())
 }
 \arguments{
   \item{y}{response}
@@ -131,7 +132,7 @@
   = 1}, 2 means rescaling s.t. each max\eqn{(|\xi_g|) = 1}}
   \item{\code{modeSwitching}}{probability to do P-IWLS with
   the mode of the proposal set to the current value, which
-  is useful if the chain gets stuck. Defaults to
+  is useful if the chain gets stuck.  Defaults to
   \eqn{0.05}. Increase if accceptance rates are too low.}
   \item{\code{reduceRet}}{don't return data and samples for
   \eqn{\alpha, \xi, \tau^2}? defaults to FALSE}}}
