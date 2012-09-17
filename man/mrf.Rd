@@ -3,7 +3,7 @@
 \title{Generate design for a 2-D Gaussian Markov Random Field}
 \usage{
   mrf(x, N, decomposition = c("ortho", "MM"), tol = 1e-10,
-  rankZ = 0.995)
+    rankZ = 0.995)
 }
 \arguments{
   \item{x}{a factor: which observation belongs to which
@@ -13,7 +13,7 @@
   matrix with one column/row for every level of \code{x},
   defining the neighborhood structure (either 0-1 or with
   positive weights, e.g. based on shared boundary length or
-  centroid distances). Has to have rownames and column
+  centroid distances).  Has to have rownames and column
   names that correspond to the levels of \code{x}, the
   function checks whether the rows/columns are in the same
   order as the levels of \code{x}. Entries on the diagonal
@@ -54,7 +54,7 @@
 \references{
   Fahrmeir, L., Lang, S. (2001) Bayesian inference for
   generalized additive mixed models based on Markov random
-  field priors. \emph{Applied Statistics},
+  field priors.  \emph{Applied Statistics},
   \bold{50}(2):201--220.
 }
 

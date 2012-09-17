@@ -3,16 +3,16 @@
 \title{Obtain posterior predictive/credible intervals from a spike-and-slab model}
 \usage{
   \method{predict}{spikeSlabGAM} (object, newdata = NULL,
-  type = c("response", "link", "terms"), terms = NULL,
-  aggregate = mean, quantiles = NULL, addIntercept =
-  is.null(terms), ...)
+    type = c("response", "link", "terms"), terms = NULL,
+    aggregate = mean, quantiles = NULL,
+    addIntercept = is.null(terms), ...)
 }
 \arguments{
   \item{object}{a \code{spikeSlabGAM} model}
 
   \item{newdata}{an optional \code{data.frame} on which to
-  evaluate predictions. Defaults to NULL, in which case the
-  fitted values for the original data are returned}
+  evaluate predictions.  Defaults to NULL, in which case
+  the fitted values for the original data are returned}
 
   \item{type}{the type of prediction required. The default
   is on the scale of response, the alternative
@@ -23,7 +23,7 @@
 
   \item{terms}{an optional character vector of term labels
   or variable names for which to return
-  fits/predictions/credible regions. If variable names
+  fits/predictions/credible regions.  If variable names
   instead of term labels are supplied, the function returns
   predictions/estimates for \emph{all} terms associated
   with these variables, i.e. their main effects (usually
@@ -31,12 +31,12 @@
   interaction terms they are involved in.}
 
   \item{aggregate}{(function) the summary statistic of the
-  posterior predictive of the linear predictor. Defaults to
-  \code{mean}.}
+  posterior predictive of the linear predictor.  Defaults
+  to \code{mean}.}
 
   \item{quantiles}{(numeric) an optional vector of
   quantiles for borders of credible regions of the returned
-  values. Defaults to NULL.}
+  values.  Defaults to NULL.}
 
   \item{addIntercept}{include global intercept term in
   prediction/estimate? Defaults to TRUE if

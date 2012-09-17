@@ -2,14 +2,14 @@
 \alias{ssGAMDesign}
 \title{Generate design and model information for \code{spikeSlabGAM}}
 \usage{
-  ssGAMDesign(formula, data, specials = c("u", "lin",
-  "fct", "sm", "rnd", "mrf", "srf"), minUniqueValues = 6,
-  lowRankInteractions = TRUE, orthogonalizeInteractions =
-  TRUE, decomposition = NULL)
+  ssGAMDesign(formula, data,
+    specials = c("u", "lin", "fct", "sm", "rnd", "mrf", "srf"),
+    minUniqueValues = 6, lowRankInteractions = TRUE,
+    orthogonalizeInteractions = TRUE, decomposition = NULL)
 }
 \arguments{
   \item{formula}{the model formula. Follows the usual R
-  syntax described in \code{\link[stats]{formula}}. Terms
+  syntax described in \code{\link[stats]{formula}}.  Terms
   in the formula that are not in the list of specials are
   automatically assigned an appropriate special, i.e.
   numerical covariates \code{x} are treated as \code{lin(x)
@@ -23,7 +23,7 @@
   \item{specials}{a vector of the types of possible model
   terms. These must be implemented as functions generating
   a design matrix with a label attribute. See also
-  \code{\link{sm}()} for an example. The documentation for
+  \code{\link{sm}()} for an example.  The documentation for
   \code{\link{spikeSlabGAM}} contains a list of implemented
   model term types and usage examples.}
 

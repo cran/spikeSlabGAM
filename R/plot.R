@@ -1,132 +1,6 @@
 #' @include spikeSlabGAM.R 
 {}
 
-#' Arrange multiple ggplots on the same device, trying to align axes etc.
-#' 
-#' This function takes a list of \code{ggplot}-objects and arranges them in a grid, trying to align the axes.
-#' Horizontal alignment for plots with titles will not be perfect.
-#' 
-#' @param ... ggplot objects
-#' @param rows a list with as many entries as there are elements of \code{...}, each list entry can be a scalar
-#' 	 or a vector of integers specifying which rows of the grid layout the respective plot is to use. Defaults to a list of \code{1}s,
-#'   i.e. all the subplots given in \code{...} are rendered side by side.
-#' @param cols a list with as many entries as there are elements of \code{...}, each list entry can be a scalar
-#' 	 or a vector of integers specifying which columns of the grid layout the respective plot is to use. Defaults to a list of \code{1} to
-#'   \code{length(...)}, i.e. all the subplots given in \code{...} are rendered side by side.
-#' @param widths a vector of relative widths for the columns. Defaults to the same width for all columns.
-#' @param heights a vector of relative heights for the rows. Defaults to the same height for all rows.
-#' @param align a vector of logicals the same length \code{...}. Defaults to TRUE for all subplots. If FALSE, no attempt is made to
-#'  	align the axes of the respective plot with the surroundding subplots.
-#' @author Harish V., based on \code{align.r} in package \code{ggextra}; wrapper function by Fabian Scheipl  
-#' @export
-arrange.ggplots <- function(...,
-		rows=as.list(rep(1, length(dots))),
-		cols=as.list(1:length(dots)),
-		widths=rep(1, max(unlist(rows))),
-		heights=rep(1,max(unlist(cols))),
-		align=rep(TRUE, length(dots))){ #set to F to exclude subplots from alignment 
-	# adopted from: http://groups.google.com/group/ggplot2/browse_thread/thread/1b859d6b4b441c90
-	align.plots <- function(gl, lstAll){
-		
-		# Adopted from http://ggextra.googlecode.com/svn/trunk/R/align.r
-		
-		# BUGBUG: Does not align horizontally when one has a title.
-		#    There seems to be a spacer used when a title is present.  Include the
-		#    size of the spacer.  Not sure how to do this yet.
-		
-		stats.row <- vector( "list", gl$nrow )
-		stats.col <- vector( "list", gl$ncol )
-		
-		
-		safeEditGrob <- function(.g, what){
-			thisGrob <- grid:::getGrob(.g, what, grep=TRUE)
-			if(is.null(thisGrob)){
-				return(ggplot2:::.zeroGrob)
-			} else {
-				return(grid:::editGrob(thisGrob, vp=NULL))
-			}
-		}
-		dots <- lapply(lstAll, function(.g) ggplotGrob(.g[[1]]))
-		ytitles <- lapply(dots, function(.g) safeEditGrob(.g,"axis.title.y.text"))
-		ylabels <- lapply(dots, function(.g) safeEditGrob(.g,"axis.text.y.text"))
-		xtitles <- lapply(dots, function(.g) safeEditGrob(.g,"axis.title.x.text"))
-		xlabels <- lapply(dots, function(.g) safeEditGrob(.g,"axis.text.x.text"))
-		plottitles <- lapply(dots, function(.g) safeEditGrob(.g,"plot.title.text"))
-		
-		legends <- lapply(dots, function(.g) if(!is.null(.g$children$legends))
-						grid:::editGrob(.g$children$legends, vp=NULL) else ggplot2:::.zeroGrob)
-		
-		widths.left <- mapply(`+`, e1=lapply(ytitles, grid:::grobWidth),
-				e2= lapply(ylabels, grid:::grobWidth), SIMPLIFY=FALSE)
-		widths.right <- lapply(legends, grid:::grobWidth)
-		heights.top <- lapply(plottitles, grid:::grobHeight)
-		# heights.top <- lapply( plottitles, function(x) grid:::unit(0,"cm") )
-		heights.bottom <- mapply(`+`, e1=lapply(xtitles, grid:::grobHeight),
-				e2= lapply(xlabels, grid:::grobHeight), SIMPLIFY=FALSE)
-		for(i in which(!align)) widths.left[[i]] <- widths.right[[i]] <-
-					heights.top[[i]] <- heights.bottom[[i]] <- grid:::unit(0, "cm") 
-		
-		for ( i in seq_along( lstAll ) ) {
-			lstCur <- lstAll[[i]]
-			
-			# Left
-			valNew <- widths.left[[ i ]]
-			valOld <- stats.col[[ min(lstCur[[3]]) ]]$widths.left.max
-			if ( is.null( valOld ) ) valOld <- grid:::unit( 0, "cm" )
-			stats.col[[ min(lstCur[[3]]) ]]$widths.left.max <- max( do.call( grid:::unit.c, list(valOld, valNew) ) )
-			
-			# Right
-			valNew <- widths.right[[ i ]]
-			valOld <- stats.col[[ max(lstCur[[3]]) ]]$widths.right.max
-			if ( is.null( valOld ) ) valOld <- grid:::unit( 0, "cm" )
-			stats.col[[ max(lstCur[[3]]) ]]$widths.right.max <- max( do.call( grid:::unit.c, list(valOld, valNew) ) )
-			
-			# Top
-			valNew <- heights.top[[ i ]]
-			valOld <- stats.row[[ min(lstCur[[2]]) ]]$heights.top.max
-			if ( is.null( valOld ) ) valOld <- grid:::unit( 0, "cm" )
-			stats.row[[ min(lstCur[[2]]) ]]$heights.top.max <- max( do.call( grid:::unit.c, list(valOld, valNew) ) )
-			
-			# Bottom
-			valNew <- heights.bottom[[ i ]]
-			valOld <- stats.row[[ max(lstCur[[2]]) ]]$heights.bottom.max
-			if ( is.null( valOld ) ) valOld <- grid:::unit( 0, "cm" )
-			stats.row[[ max(lstCur[[2]]) ]]$heights.bottom.max <- max( do.call( grid:::unit.c, list(valOld, valNew) ) )
-		}
-		
-		for(i in seq_along(dots)){
-			lstCur <- lstAll[[i]]
-			nWidthLeftMax <- stats.col[[ min( lstCur[[ 3 ]] ) ]]$widths.left.max
-			nWidthRightMax <- stats.col[[ max( lstCur[[ 3 ]] ) ]]$widths.right.max
-			nHeightTopMax <- stats.row[[ min( lstCur[[ 2 ]] ) ]]$heights.top.max
-			nHeightBottomMax <- stats.row[[ max( lstCur[[ 2 ]] ) ]]$heights.bottom.max
-            grid:::pushViewport(grid:::viewport( layout.pos.row=lstCur[[2]],
-							layout.pos.col=lstCur[[3]], just=c("left","top") ) )
-            grid:::pushViewport(grid:::viewport(
-							x=grid:::unit(0, "npc") + nWidthLeftMax - widths.left[[i]],
-							y=grid:::unit(0, "npc") + nHeightBottomMax - heights.bottom[[i]],
-							width=grid:::unit(1, "npc") - nWidthLeftMax + widths.left[[i]] -
-									nWidthRightMax + widths.right[[i]],
-							height=grid:::unit(1, "npc") - nHeightBottomMax + heights.bottom[[i]] -
-									nHeightTopMax + heights.top[[i]],
-							just=c("left","bottom")))
-            grid:::grid.draw(dots[[i]])
-            grid:::upViewport(2)
-		}
-	}
-	
-	dots <- list(...)
-	gl <- grid:::grid.layout(nrow=max(unlist(rows)),ncol=max(unlist(cols)), 
-			widths=widths, 	heights=heights)
-	ddots <- mapply(function(p, r, c){
-				return(list(p, r, c))
-			}, p=dots, r=rows, c=cols, SIMPLIFY=FALSE)
-	
-    grid:::grid.newpage()
-    grid:::pushViewport(grid:::viewport(layout=gl)) 
-	align.plots(gl, ddots)
-}
-
 #' Plot the estimated effect of a model term.
 #' 
 #' Plots the estimated linear predictor for a model term, i.e a main effect or a (2- or 3-way) interaction.
@@ -286,7 +160,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 
 		
 		titleStr <- if(cumulative) paste(vars,collapse="*") else label
-		plotElems <- list(opts(title=titleStr))
+		plotElems <- list(labs(title=titleStr))
 		
 		if(length(vars)==1)	{
 			# srf
@@ -410,7 +284,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 		
 		
 		titleStr <- if(cumulative) paste(vars,collapse="*") else label
-		plotElems <- list(opts(title=titleStr))
+		plotElems <- list(labs(title=titleStr))
 		
 		if(length(vars)==1){
 			if(is.factor(grid[,1])){
@@ -479,13 +353,13 @@ plotTerm <- function(label, m, cumulative=TRUE,
 					
 					aesStr <- aes_string(x=vars[1], y=vars[2], z=aggregateStr, colour="..level..")
 					plotElems <- c(geom_contour(data=data[keep, ], mapping=aesStr, bins=nBins),
-							list(scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred'))),
+							list(scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred'), guide="legend")),
 							geom_rug(data=rugdata, mapping=aes_string(x=vars[1], y=vars[2]), alpha=alphaRug),
 							plotElems)
 					if(plotCR){
 						data$sign <- ifelse(apply(data[,4:5],1, prod)>0, sign(data[,5]), 0)
 						plotElems <- c(geom_tile(data=data, aes_string(x=vars[1], y=vars[2], fill="sign"), colour=NA, alpha=.1),
-								list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1)),
+								list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1)), guide="legend",
 										breaks=c(-1,1), labels=c("< 0","> 0"))), 
 								plotElems)
 						
@@ -565,6 +439,8 @@ plotTerm <- function(label, m, cumulative=TRUE,
 #' 
 #' This function plots the estimated linear predictors of the terms in a model on a grid of values. 
 #' By default displays all 3-way, 2-way interactions and main effects present in the model.
+#' Starting with ggplot-0.9.2 these are no longer aligned by their axes due to internal changes in grid and ggplot2.
+#' 
 #' 
 #' @param x a fitted \code{spikeSlabGAM} model
 #' @param labels a character vector of names of model terms to be plotted
@@ -582,12 +458,10 @@ plotTerm <- function(label, m, cumulative=TRUE,
 #' 	fortify the plot(s) with partial residuals etc.  
 #' 	Defaults to an empty list. Unless specified differently here, the default ggplot-theme (\code{\link[ggplot2]{theme_gray}}) 
 #'  is changed to a white background with major gridlines in gray (\code{'grey95'}), no minor grid lines, and smaller text for the legends.   
-#' @param rows	a list controlling the positioning of the various plots on the device. See \code{\link{arrange.ggplots}}
-#' @param cols  a list controlling the positioning of the various plots on the device. See \code{\link{arrange.ggplots}}
-#' @param widths a list controlling the positioning of the various plots on the device. See \code{\link{arrange.ggplots}}
-#' @param heights a list controlling the positioning of the various plots on the device. See \code{\link{arrange.ggplots}}
-#' @param align a vector controlling the positioning of the various plots on the device. See \code{\link{arrange.ggplots}}. 
-#' 	Defaults to no alignment.
+#' @param rows	a list controlling the positioning of the various plots on the device. See \code{\link[gridExtra]{grid.arrange}}
+#' @param cols  a list controlling the positioning of the various plots on the device. See \code{\link[gridExtra]{grid.arrange}}
+#' @param widths a list controlling the positioning of the various plots on the device. See \code{\link[gridExtra]{grid.arrange}}
+#' @param heights a list controlling the positioning of the various plots on the device. See \code{\link[gridExtra]{grid.arrange}}
 #' @param maxPlotsPerPage maximum number of plots rendered on a single page/device. Defaults to 9.
 #' @param ... 	arguments passed from or to other methods (not used)
 #' 
@@ -596,6 +470,8 @@ plotTerm <- function(label, m, cumulative=TRUE,
 #'  that have a smooth term, the smooth term is specified \emph{after} the linear term in the formula. 
 #' @S3method plot spikeSlabGAM
 #' @method plot spikeSlabGAM
+#' @importFrom grid unit
+#' @importFrom gridExtra grid.arrange 
 #' @return a list of \code{\link[ggplot2]{ggplot}}-objects (invisible)
 #' @author Fabian Scheipl
 #' @examples
@@ -603,15 +479,15 @@ plotTerm <- function(label, m, cumulative=TRUE,
 #FIXME: this only works if smooth terms are specified in the formula AFTER linear terms...
 plot.spikeSlabGAM <- function(x, labels=NULL, cumulative=TRUE, commonEtaScale = FALSE,
 		aggregate=mean, quantiles=c(.1, .9), gridlength=20, base_size = 12, ggElems=list(), 
-		rows=NULL, cols=NULL, widths=NULL, heights=NULL, align=NULL, maxPlotsPerPage=6,...){
+		rows=NULL, cols=NULL, widths=NULL, heights=NULL, maxPlotsPerPage=6,...){
 	
 	# add custom theme / overwrite default theme
-	ggElems <- c(list(opts(panel.grid.minor = theme_line(colour = NA),
-			panel.grid.major = theme_line(colour = "grey95"),
-			panel.background=theme_rect(fill="white"),
-			legend.key=theme_rect(fill = "white", colour = "white"),	
-			legend.text=theme_text(size = base_size * 0.6),
-			legend.title=theme_text(face = "bold", size = base_size * 0.6, hjust = 0))), ggElems)
+	ggElems <- c(list(theme(panel.grid.minor = element_line(colour = NA),
+			panel.grid.major = element_line(colour = "grey95"),
+			panel.background=element_rect(fill="white"),
+			legend.key=element_rect(fill = "white", colour = "white"),	
+			legend.text=element_text(size = base_size * 0.6),
+			legend.title=element_text(face = "bold", size = base_size * 0.6, hjust = 0))), ggElems)
 	
 	
 	if(is.null(labels)){
@@ -672,7 +548,7 @@ plot.spikeSlabGAM <- function(x, labels=NULL, cumulative=TRUE, commonEtaScale = 
 	if(!is.null(cols)) stopifnot(length(cols)==length(plotLabels))
 	if(!is.null(widths)) stopifnot(length(widths)==length(plotLabels))
 	if(!is.null(heights)) stopifnot(length(heights)==length(plotLabels))
-	if(!is.null(align))stopifnot(length(align)==length(plotLabels))
+	
 	
 	plotList <- lapply(as.list(plotLabels), plotTerm, m=x, cumulative=cumulative,
 			aggregate=aggregate, quantiles=quantiles, gridlength=gridlength, ggElems=ggElems)
@@ -724,30 +600,37 @@ plot.spikeSlabGAM <- function(x, labels=NULL, cumulative=TRUE, commonEtaScale = 
 		grid <- grid[1:p,]
 		return(grid)
 	}
+    plotList <- lapply(plotList, function(x) {
+                #drop "gg"-class so that arrangeGrob will work
+                attr(x, "class") <- "ggplot"
+                return(x)    
+            })
+    
+    
 	sapply(1:length(start), function(page){	
 				if(all(is.null(rows), is.null(cols))){
 					layout <- makeLayout(stop[page]-start[page]+1)
-					rows <- as.list(layout[,1])
-					cols <- as.list(layout[,2])
+					rows <- layout[,1]
+					cols <- layout[,2]
 				}
 				
 				if(is.null(widths)) widths <- rep(1, max(unlist(rows)))
 				if(is.null(heights)) heights <- rep(1,max(unlist(cols)))
-				if(is.null(align)) align <- rep(FALSE, length(plotLabels))
 				
 				arrangeThis <- function(...){
-					arrange.ggplots(...,rows=rows, cols=cols,
-							widths=widths, heights=heights, align=align)
+                    grid.arrange(..., nrow=max(rows), ncol=max(cols),
+                           widths=unit(widths, "null"), heights=unit(heights, "null"), just="left")
 				}
 				if(dev.interactive() & length(start)>1 & page!=1){
 					nextPlot <- readline("Press 'n' to plot next page on a new device, or any other key to overwrite current plot.")
 					if(nextPlot=="n") dev.new()
 				}
+               
+                
 				do.call(arrangeThis, 
 						plotList[start[page]:stop[page]])
-				
-			})
-	invisible(plotList)
+            })
+    invisible(plotList)
 }
 
 

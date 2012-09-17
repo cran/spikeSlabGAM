@@ -50,10 +50,10 @@ summary.spikeSlabGAM <- function(object, threshold=.5, ...){
 	
 	trmSummary[penRows, "P(gamma=1)"] <- round(object$postMeans$pV1, 3)
 	etaNoU <- if(any(!penRows)) {
-		etas[,"eta"] - etas[, which(!penRows)]
+        etas[,"eta"] - rowSums(etas[, which(!penRows), drop=FALSE])
 	} else etas[,"eta"]
 	etaNoUSq <- crossprod(etaNoU)
-	trmSummary[penRows, "pi"] <- apply(etas[, penCols, drop=F], 2, function(x) t(etaNoU)%*%x/etaNoUSq)
+	trmSummary[penRows, "pi"] <- apply(etas[, penCols, drop=FALSE], 2, function(x) t(etaNoU)%*%x/etaNoUSq)
 	trmSummary[1:q, "dim"] <- dims
 	
 	response <- if(object$family == 1 & any(object$model$scale!=1)){

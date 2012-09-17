@@ -3,15 +3,15 @@
 \title{Generate design for penalized surface estimation.}
 \usage{
   srf(coords, K = min(50, sum(nd)/4), rankZ = 0.999,
-  centerBase = TRUE, baseType = c("B", "thinPlate"),
-  decomposition = c("ortho", "MM", "asIs"), tol = 1e-10)
+    centerBase = TRUE, baseType = c("B", "thinPlate"),
+    decomposition = c("ortho", "MM", "asIs"), tol = 1e-10)
 }
 \arguments{
   \item{coords}{a \code{data.frame} with two columns
   containing the coordinates}
 
   \item{K}{(approximate) number of basis functions in the
-  original basis (defaults to 50). If \code{baseType="B"}
+  original basis (defaults to 50).  If \code{baseType="B"}
   you can specify a vector giving the number of marginal
   basis functions in each direction.}
 
@@ -27,7 +27,7 @@
   \item{baseType}{Defaults to \code{"B"}, i.e. a tensor
   product basis based on marginal cubic B-splines with
   ridge penalty (i.e. penalizing deviations from the
-  constant). Set to \code{"thinPlate"} if cubic thin plate
+  constant).  Set to \code{"thinPlate"} if cubic thin plate
   splines are desired, see note below.}
 
   \item{decomposition}{use a (truncated) spectral
@@ -68,7 +68,7 @@
   for the thin plate spline basis are chosen via a
   space-filling algorithm (i.e. medoids returned by
   \code{\link[cluster]{clara}}) as suggested in
-  Ruppert/Wand/Carroll, ch. 13.5. Since the thin plate
+  Ruppert/Wand/Carroll, ch. 13.5.  Since the thin plate
   penalty term penalizes deviations from a linear trend, it
   is recommended to add marginal linear trends and their
   interaction to the model if \code{baseType="thinPlate"}
