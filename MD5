@@ -1,4 +1,4 @@
-4a2631228673c93cb40f63d7bbde2315 *DESCRIPTION
+7b2503693cf2c3521a79166fd57e2693 *DESCRIPTION
 6afebbba14bd7c6c75d8ac93c92794e6 *NAMESPACE
 3f978b924cabbf3b1eec47a53ff2fb05 *R/bugs.R
 78baef76391844610e425844829d7d33 *R/plot.R
@@ -11,7 +11,7 @@ d0369d8e51e324cb62b0e126254b9e57 *R/summary.R
 28b261441e536846f47abdff9fb1b0ee *R/utils.R
 667aadfaaddac2249fbf03f49b11e06d *TODO
 befbb9c8ebb44eef00fce532e9bf50d8 *inst/CITATION
-8b4a121c3ebc8ee2bf2fc6286d0ca8b5 *inst/doc/UsingSpikeSlabGAM.pdf
+bed3de7cd19b20a28cb831d61fb46a0e *inst/doc/UsingSpikeSlabGAM.pdf
 91449acf296fec66133fdfedf861e2a7 *man/evalTerm.Rd
 718ae712ca28f0e4f3acd5b4038bbc75 *man/fct.Rd
 490d405764e69d1b79443980ccf70fa1 *man/getPosteriorTerm.Rd
@@ -36,3 +36,4 @@ aac5a60e84b4a1ea8ac088c3f6107839 *man/rnd.Rd
 a33095b22ff621ece7317ffc81617dfa *src/utils.h
 86e8ae5cf6af8364d2bc856635495890 *vignettes/UsingSpikeSlabGAM.Rnw
 1f1884d97cf780b9be1982b0199de9b2 *vignettes/UsingSpikeSlabGAM.bib
+01112adf2dd2758759c396a4ff85f4d0 *vignettes/UsingSpikeSlabGAM.pdf
