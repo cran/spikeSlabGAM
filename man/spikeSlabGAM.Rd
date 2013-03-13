@@ -104,6 +104,10 @@
   \code{options()$cores} is unspecified, snow uses 8.
 }
 \examples{
+\dontrun{
+## examples not run due to stringent time constraints on CRAN checks.
+## full examples below should take about 2-4 minutes.
+
 set.seed(91179)
 n <- 400
 d <- data.frame(f1 = sample(gl(3, n/3)), f2 = sample(gl(4,
@@ -118,16 +122,11 @@ d$f <- with(d, 5 * (nf1 + 2 * sin(4 * pi * (x1 - 0.2) *
 d$y <- with(d, scale(f + rnorm(n)))
 d$yp <- with(d, rpois(n, exp(f/10)))
 
-# next statement necessary to follow CRAN check limitations on 
-# CPU usage (tells multicore to use 2 processes only)
-options(cores=2)
-
 # fit & display the model:
 m1 <- spikeSlabGAM(y ~ x1 * f1 + f1 * f2 + x3 * f1 +
 				x1 * x2, data = d)
 summary(m1)
 
-\dontrun{
 # visualize estimates:
 plot(m1)
 plot(m1, cumulative = FALSE)
@@ -161,10 +160,12 @@ plot(b)
   Variable Selection, Model Choice and Regularization for
   Generalized Additive Mixed Models in R. \emph{Journal of
   Statistical Software}, \bold{43}(14), 1--24.
-  
+
   Fabian Scheipl, Ludwig Fahrmeir, Thomas Kneib (2012).
-  Spike-and-Slab Priors for Function Selection in Structured Additive Regression Models. 
-  \emph{Journal of the American Statistical Association}, to appear.
+  Spike-and-Slab Priors for Function Selection in
+  Structured Additive Regression Models. \emph{Journal of
+  the American Statistical Association}, \bold{107}(500),
+  1518--1532.
 }
 \seealso{
   \code{\link{ssGAMDesign}} for details on model

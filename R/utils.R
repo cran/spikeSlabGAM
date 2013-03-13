@@ -75,7 +75,7 @@ getModels <- function(x, thresh = 0.5) {
 #(assumes non-closed polygon, i.e head(vertices,1)!=tail(vertices,1))
 insidePoly <- function(points, vertices){
 	
-	#angle between two vectors, enforce (-180°, 180°)
+	#angle between two vectors, enforce (-180ï¿½, 180ï¿½)
 	angle <- function(v1, v2){
 		ang <- (atan2(v1[2],v1[1]) - atan2(v2[2],v2[1]))
 		while(ang > pi) ang <- ang - 2*pi
@@ -95,7 +95,7 @@ insidePoly <- function(points, vertices){
 					e2 <- vertices[ind[2],] - p 
 					return(angle(as.numeric(e1), as.numeric(e2)))
 				})
-		#if point is exactly on hull, one angle must be |180|° 
+		#if point is exactly on hull, one angle must be |180|ï¿½ 
 		if(any(sapply(abs(a), identical, pi))) return(2*pi)
 		
 		return(sum(a))
@@ -232,11 +232,12 @@ summarizeF <- function(f, aggregate, quantiles){
 				drop(t(apply(f, 1, quantile, probs=quantiles, na.rm=TRUE)))
 			}	
 	res <- cbind(agg, quant)
-	nm <- list(a = if(!is.null(aggregate)){
-						if(NCOL(aggregate)==1){
+	nm <- list(
+      a = if(!is.null(aggregate)){
+						if(NCOL(agg)==1){
 							"eta"	
 						} else {
-							paste("eta.",1:NCOL(aggregate),sep="")
+							paste("eta.",1:NCOL(agg),sep="")
 						}
 					} else NULL , 
 			qu = if(!is.null(quantiles)){
