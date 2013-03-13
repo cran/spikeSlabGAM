@@ -174,7 +174,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 				data$sign <- ifelse(apply(data[,2:3],1, prod)>0, sign(data[,3]), 0)
 				plotElems <- c(geom_tile(data=data, aes_string(x=nms[1], y=nms[2], fill="sign"), colour=NA, alpha=.1),
 						list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1)),
-								breaks=c(-1,1), labels=c("< 0","> 0"))), 
+								breaks=c(-1,1), limits=c(-1.1, 1.1),  labels=c("< 0","> 0"))), 
 						plotElems)
 				
 			} 
@@ -193,7 +193,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 				data$sign <- ifelse(apply(data[,2:3],1, prod)>0, sign(data[,3]), 0)
 				plotElems <- c(geom_tile(data=data, aes_string(x=nms[1], y=nms[2], fill="sign"), colour=NA, alpha=.1),
 						list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1))),
-								breaks=c(-1,1), labels=c("< 0","> 0")), 
+								breaks=c(-1,1), limits=c(-1.1, 1.1),  labels=c("< 0","> 0")), 
 						plotElems)
 			}
 		} 
@@ -211,7 +211,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 				data$sign <- ifelse(apply(data[,2:3],1, prod)>0, sign(data[,3]), 0)
 				plotElems <- c(geom_tile(data=data, aes_string(x=nms[1], y=nms[2], fill="sign"), colour=NA, alpha=.1),
 						list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1))),
-								breaks=c(-1,1), labels=c("< 0","> 0")), 
+								breaks=c(-1,1), limits=c(-1.1, 1.1),  labels=c("< 0","> 0")), 
 						plotElems)	 
 			}
 		}
@@ -233,7 +233,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 					data$sign <- ifelse(apply(data[,2:3],1, prod)>0, sign(data[,3]), 0)
 					plotElems <- c(geom_tile(data=data, aes_string(x=nms[1], y=nms[2], fill="sign"), colour=NA, alpha=.1),
 							list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1)),
-									breaks=c(-1,1), labels=c("< 0","> 0"))), 
+									breaks=c(-1,1), limits=c(-1.1, 1.1),  labels=c("< 0","> 0"))), 
 							plotElems)
 				}
 		}	
@@ -253,7 +253,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 				plotElems <- c(
 						geom_tile(data=data, aes_string(x=nms[1], y=nms[2], fill="sign"), colour=NA, alpha=.1),
 						list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1)),
-								breaks=c(-1,1), labels=c("< 0","> 0"))), 
+								breaks=c(-1,1), limits=c(-1.1, 1.1),  labels=c("< 0","> 0"))), 
 						plotElems)	 
 			}
 		} 
@@ -347,20 +347,21 @@ plotTerm <- function(label, m, cumulative=TRUE,
 					#so we blow up the data a little
 					suppressWarnings(rugdata <- data.frame(do.call(cbind, c(xu, value=0))))
 					rugdata <- do.call(rbind, apply(t(levels(meltdata$variable)), 2, function(x) cbind(rugdata, variable=x)))
-					
+				
 					convhull <- m$data[chull(as.matrix(m$data[,vars])),vars]
 					keep <- which(insidePoly(data[,vars], convhull)) 
 					
 					aesStr <- aes_string(x=vars[1], y=vars[2], z=aggregateStr, colour="..level..")
 					plotElems <- c(geom_contour(data=data[keep, ], mapping=aesStr, bins=nBins),
 							list(scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred'), guide="legend")),
-							geom_rug(data=rugdata, mapping=aes_string(x=vars[1], y=vars[2]), alpha=alphaRug),
+							geom_rug(data=rugdata, 
+                                    mapping=aes_string(x=vars[1], y=vars[2]), alpha=alphaRug),
 							plotElems)
 					if(plotCR){
 						data$sign <- ifelse(apply(data[,4:5],1, prod)>0, sign(data[,5]), 0)
 						plotElems <- c(geom_tile(data=data, aes_string(x=vars[1], y=vars[2], fill="sign"), colour=NA, alpha=.1),
 								list(scale_fill_gradient2(name="CI", low =  muted(alpha('darkblue', .1)), mid = 'white', high = muted(alpha('darkred', .1)), guide="legend",
-										breaks=c(-1,1), labels=c("< 0","> 0"))), 
+										breaks=c(-1,1), limits=c(-1.1, 1.1),  labels=c("< 0","> 0"))), 
 								plotElems)
 						
 					} 
@@ -378,26 +379,27 @@ plotTerm <- function(label, m, cumulative=TRUE,
 					meltdata <- melt(data, id.vars=vars)
 					#data for geom_rug has to contain the faceting variable (and everything else too for some reason?!?)
 					#so we blow up the data a little
-					suppressWarnings(rugdata <- data.frame(do.call(cbind, c(xu, value=0))))
-					rugdata <- do.call(rbind, apply(t(levels(meltdata$variable)), 2, function(x) cbind(rugdata, variable=x)))
+					#suppressWarnings(rugdata <- data.frame(do.call(cbind, c(xu, value=0))))
+					#rugdata <- do.call(rbind, apply(t(levels(meltdata$variable)), 2, function(x) cbind(rugdata, variable=x)))
 					
-					convhull <- m$data[chull(as.matrix(m$data[,vars[2:3]])),vars]
+					convhull <- m$data[chull(as.matrix(m$data[,vars[2:3]])),vars[2:3]]
 					keep <- which(insidePoly(data[,vars[2:3]], convhull)) 
 					
 					aesStr <- aes_string(x=vars[2], y=vars[3], z=aggregateStr, colour="..level..")
 					plotElems <- c(geom_contour(data=data[keep, ], mapping=aesStr, bins=nBins),
 							list(scale_colour_gradient2(name=expression(eta), low =  muted('darkblue'), mid = 'grey80', high = muted('darkred'))),
-							geom_rug(data=rugdata, mapping=aes_string(x=vars[2], y=vars[3]), alpha=alphaRug),
+							#geom_rug(data=rugdata, 
+                            #        mapping=aes_string(x=vars[2], y=vars[3]), alpha=alphaRug),
 							plotElems)
 					
 					if(plotCR){
 						data$sign <- ifelse(apply(data[,5:6],1, prod)>0, sign(data[,5]), 0)
 						plotElems <- c(geom_tile(data=data, aes_string(x=vars[2], y=vars[3], fill="sign"), colour=NA,  alpha=.1),
                                 list(scale_fill_gradient2(name="CI", low =  alpha(muted('darkblue'), .1), mid = alpha('white', .1), 
-                                        high = alpha(muted('darkred'), .1), breaks=c(-1,1), labels=c("< 0","> 0"))), 
+                                        high = alpha(muted('darkred'), .1), breaks=c(-1,1), limits=c(-1.1, 1.1),  labels=c("< 0","> 0"))), 
 								plotElems)
 					}
-					plotElems <- c(facet_grid(eval(substitute(formula( ~ .a), list(.a=as.name(vars[1])))), labeller=label_both), plotElems)
+					plotElems <- c(list(facet_grid(eval(substitute(formula( ~ .a), list(.a=as.name(vars[1])))), labeller=label_both)), plotElems)
 					
 					
 					
@@ -413,7 +415,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 						plotElems <- c(geom_ribbon(aesCRStr, alpha=.3), plotElems)
 					}
 					facetFrml <- eval(substitute(formula( ~ .a), list(.a=as.name(vars[1]))))
-					plotElems <- c(facet_grid(facetFrml, labeller=label_both), list(ylab(expression(eta))), plotElems)
+					plotElems <- c(list(facet_grid(facetFrml, labeller=label_both), list(ylab(expression(eta)))), plotElems)
 				}
 				if(all(fcts)){
 					#fct:fct:fct
@@ -426,7 +428,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 								geom_point(aesStr, position=position_dodge(width=.66))
 							} 
 					facetFrml <- eval(substitute(formula( ~ .a), list(.a=as.name(vars[1]))))
-					plotElems <- c(facet_grid(facetFrml, labeller=label_both), geom, list(ylab(expression(eta))), plotElems)
+					plotElems <- c(list(facet_grid(facetFrml, labeller=label_both), geom, list(ylab(expression(eta)))), plotElems)
 				}
 			}
 		}

@@ -60,10 +60,14 @@
 #' @author Fabian Scheipl
 #' @references Fabian Scheipl (2011). \code{spikeSlabGAM}: Bayesian Variable Selection, Model Choice and Regularization for Generalized Additive Mixed Models in R. 
 #' \emph{Journal of Statistical Software}, \bold{43}(14), 1--24.
+#' 
 #' Fabian Scheipl, Ludwig Fahrmeir, Thomas Kneib (2012). Spike-and-Slab Priors for Function Selection in Structured Additive Regression Models. 
-#' \emph{Journal of the American Statistical Association}, to appear. 
+#' \emph{Journal of the American Statistical Association}, \bold{107}(500), 1518--1532. 
 #' @export
 #' @examples
+#' \dontrun{
+#' ## examples not run due to stringent time constraints on CRAN checks.
+#' ## full examples below should take about 2-4 minutes.
 #' 
 #' set.seed(91179)
 #' n <- 400
@@ -78,10 +82,6 @@
 #' 									(x2 - 0.7)) - nf1 * x1))
 #' d$y <- with(d, scale(f + rnorm(n)))
 #' d$yp <- with(d, rpois(n, exp(f/10)))
-#' 
-#' # next statement strictly to follow CRAN check limitations on 
-#' # CPU usage
-#' options(cores=2)
 #' 
 #' # fit & display the model:
 #' m1 <- spikeSlabGAM(y ~ x1 * f1 + f1 * f2 + x3 * f1 + 
@@ -111,6 +111,7 @@
 #' # quick&dirty convergence diagnostics:
 #' print(b <- ssGAM2Bugs(m2))
 #' plot(b) 
+#' } 
 spikeSlabGAM <- function(formula,
 		data,
 		...,
