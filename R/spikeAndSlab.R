@@ -12,7 +12,7 @@
 #'  A "SOCK" cluster is set up under Windows to do so (and closed after computations are done, I try to clean up after myself), 
 #'  see \code{\link[parallel]{makeCluster}} etc.
 #'  Use \code{options(mc.cores=<foo>)} to set the (maximal) number of processes forked by the parallelization. 
-#' If \code{options()$mc.cores} is unspecified, it is set to 8.  
+#' If \code{options()$mc.cores} is unspecified, it is set to 2.  
 #' 
 #' Details for model specification:
 #'  \describe{
@@ -100,6 +100,7 @@
 #' @importFrom coda mcmc 
 #' @importFrom coda mcmc.list
 #' @importFrom mvtnorm rmvnorm
+#' @import parallel
 #' @useDynLib spikeSlabGAM sampler 
 spikeAndSlab <- function(
   y,    # response (n x 1)
@@ -121,9 +122,12 @@ spikeAndSlab <- function(
                               "gaussian" = 0,
                               "binomial" = 1,
                               "poisson" =2))
-  if((family!=0)&&(any(y<0))) stop("non-gaussian responses must be non-negative.\n")
-  if((family==1)&&(any(y>1))) stop("binomial responses must be between 0 and 1.\n")
-  if((family==2)&&(any(y%%1 != 0))) stop("poisson reponses must be integers.")
+  if((family!=0)&&(any(y<0))) 
+      stop("non-gaussian responses must be non-negative.\n")
+  if((family==1)&&(any(y>1))) 
+      stop("binomial responses must be between 0 and 1.\n")
+  if((family==2)&&(any(y%%1 != 0))) 
+      stop("poisson reponses must be integers.")
   
   ### Check data and get dimensions 
   y <- as.matrix(y)
@@ -172,7 +176,8 @@ spikeAndSlab <- function(
   
   
   with(mcmc,
-       stopifnot(all(c(chainLength, burnin, thin) >=c(1,0,1)), scalemode %in% c(-1, 0, 1, 2)))
+       stopifnot(all(c(chainLength, burnin, thin) >=c(1,0,1)), 
+                 scalemode %in% c(-1, 0, 1, 2)))
   
   
   mcmc$totalLength <- with(mcmc, burnin + thin * chainLength)
@@ -498,8 +503,8 @@ spikeAndSlab <- function(
         "Setting up parallel computation:\nHow many processes do you want to run? ")))
       stopifnot(!is.null(options()$mc.cores), !is.na(options()$mc.cores), options()$mc.cores>0)
     } else {
-      message("Setting up SOCK cluster with 8 local slaves.\nUse 'options(mc.cores= <YourNumberHere>)' to override next time.")
-      options(mc.cores=8)
+      message("Setting up SOCK cluster with 2 local slaves.\nUse 'options(mc.cores= <YourNumberHere>)' to override next time.")
+      options(mc.cores=2)
     }
   }
  
@@ -672,15 +677,15 @@ spikeAndSlab <- function(
   
   
   if(parallel=="parallel") {
-    res <- parallel:::mclapply(1:mcmc$nChains, do1Chain)
+    res <- mclapply(1:mcmc$nChains, do1Chain)
   } 
   if(parallel=="snow"){
     clusterExportLocal <-  function (cl, list){
       for (name in list) {
-        parallel:::clusterCall(cl, assign, name, get(name, pos = -1))
+        clusterCall(cl, assign, name, get(name, pos = -1))
       }
     }
-    cl <- parallel:::makePSOCKCluster(options()$mc.cores)
+    cl <- makeCluster(spec=options()$mc.cores, type="PSOCK")
     clusterExportLocal(cl,
                        c("hyperparameters","model","start","mcmc","y","X",
                          "blocksAlpha","alphaIndABegin","alphaIndAEnd",
@@ -688,8 +693,8 @@ spikeAndSlab <- function(
                          "betaMat", "alphaMat", "ksiMat", "gammaMat", "probV1Mat",
                          "tau2Mat", "sigma2Mat", "wMat", "likMat", "logPostMat","unpen",
                          "familystr"))
-    res <- parallel:::parLapply(cl, as.list(1:mcmc$nChains), do1Chain)
-    parallel:::stopCluster(cl)
+    res <- parLapply(cl, as.list(1:mcmc$nChains), do1Chain)
+    stopCluster(cl)
   }
   if(parallel=="none"){	
     res <- lapply(1:mcmc$nChains, function(x) {

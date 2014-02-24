@@ -81,6 +81,7 @@ clrs <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00", "#FFFF33",
 <<loadLibs, echo=FALSE, results=hide>>=
 library("spikeSlabGAM")
 library("mboost")
+library("ggplot2")
 @
 
 \title{\pkg{spikeSlabGAM}: Bayesian Variable Selection, Model Choice and Regularization for Generalized
