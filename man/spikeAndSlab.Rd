@@ -73,12 +73,13 @@
   provides a formula-based interface for specifying models
   and takes care of (most of) the housekeeping. Sampling of
   the chains is done in parallel using package
-  \code{multicore} if available. If not, a socket cluster
-  set up with \code{snow} is used where available. Use
-  \code{options(cores=foo)} to set the (maximal) number of
-  processes spawned by the parallelization. If
-  \code{options()$cores} is unspecified, \code{snow} uses
-  8.
+  \code{parallel}.  A "SOCK" cluster is set up under
+  Windows to do so (and closed after computations are done,
+  I try to clean up after myself), see
+  \code{\link[parallel]{makeCluster}} etc.  Use
+  \code{options(mc.cores=<foo>)} to set the (maximal)
+  number of processes forked by the parallelization. If
+  \code{options()$mc.cores} is unspecified, it is set to 2.
 }
 \details{
   Details for model specification: \describe{

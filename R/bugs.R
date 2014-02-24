@@ -14,6 +14,7 @@
 #' @author Fabian Scheipl
 #' @examples
 #' #see help for spikeSlabGAM
+#' @import R2WinBUGS
 ssGAM2Bugs <- function(m, rm=c("alpha", "ksi","gamma")){
 	stopifnot(class(m)=="spikeSlabGAM")
 	

@@ -36,6 +36,9 @@
 #' @author Fabian Scheipl
 #' @examples
 #' #see help for spikeSlabGAM
+#' @import ggplot2
+#' @import reshape
+#' @import scales
 plotTerm <- function(label, m, cumulative=TRUE, 
 		aggregate=mean, quantiles=c(.1, .9), gridlength=40, contours=30, ggElems=list()){
 	

@@ -141,10 +141,10 @@ hyper <- list(gamma = c(v0 = 5e-04), tau2 = c(10,
 				30), w = c(2, 1))
 
 # complicated formula example, poisson response:
-m2 <- spikeSlabGAM(yp ~ x1 * (x2 + f1) + (x2 + x3 +
-					f2)^2 - sm(x2):sm(x3), data = d, 
-          family = "poisson", mcmc = mcmc,
-		hyperparameters = hyper)
+m2 <- spikeSlabGAM(yp ~ x1 * (x2 + f1) + (x2 + x3 + f2)^2 -
+         sm(x2):sm(x3), data = d,
+  				family = "poisson", mcmc = mcmc,
+		      hyperparameters = hyper)
 summary(m2)
 plot(m2)
 
