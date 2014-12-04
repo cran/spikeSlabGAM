@@ -473,8 +473,7 @@ plotTerm <- function(label, m, cumulative=TRUE,
 #' @seealso \code{\link{plotTerm}} for more details on the specific plots
 #' @note Note that \code{cumulative=TRUE} will only find all relevant terms to accumulate if, for all numeric covariates
 #'  that have a smooth term, the smooth term is specified \emph{after} the linear term in the formula. 
-#' @S3method plot spikeSlabGAM
-#' @method plot spikeSlabGAM
+#' @export 
 #' @importFrom grid unit
 #' @importFrom gridExtra grid.arrange 
 #' @return a list of \code{\link[ggplot2]{ggplot}}-objects (invisible)

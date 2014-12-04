@@ -66,7 +66,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' ## examples not run due to stringent time constraints on CRAN checks.
+#' ## examples not run due to time constraints on CRAN checks.
 #' ## full examples below should take about 2-4 minutes.
 #' 
 #' set.seed(91179)

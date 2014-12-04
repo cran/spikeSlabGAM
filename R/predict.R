@@ -125,8 +125,7 @@ evalTerm <- function(label, model, newdata=NULL, aggregate=mean, quantiles=c(.1,
 #' @return  If \code{type="terms"}, a list of \code{data.frame}s containing the requested pointwise summary statistics
 #'   for the supplied terms (use e.g. \code{\link{Reduce}("+", ...)} to get row-wise sums of the list-entries). Otherwise, a \code{data.frame} containing the requested pointwise summary statistics
 #'   of the posterior predictive of the linear predictor (\code{type="link"}) or the conditional expectation of the response (\code{type="response"}) is returned.
-#' @S3method predict spikeSlabGAM
-#' @method predict spikeSlabGAM
+#' @export
 #' @author Fabian Scheipl 
 predict.spikeSlabGAM <- function(object, newdata=NULL, type=c("response", "link", "terms"), terms=NULL,
 		aggregate=mean, quantiles=NULL, addIntercept=is.null(terms), ...){

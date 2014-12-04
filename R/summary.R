@@ -21,8 +21,7 @@
 #' @return an object of class \code{summary.spikeSlabGAM} 
 #' @author Fabian Scheipl
 #' @references Gu, Chong (2002). Smoothing Spline ANOVA models. Springer. (see chapter 3.6)
-#' @S3method summary spikeSlabGAM
-#' @method summary spikeSlabGAM
+#' @export
 summary.spikeSlabGAM <- function(object, threshold=.5, ...){
 	stopifnot(class(object)=="spikeSlabGAM", threshold >= 0, threshold <= 1)
 	
@@ -88,7 +87,7 @@ summary.spikeSlabGAM <- function(object, threshold=.5, ...){
 #' @return invisibly returns \code{x}
 #' @author Fabian Scheipl
 #' @method print summary.spikeSlabGAM
-#' @S3method print summary.spikeSlabGAM
+#' @export
 print.summary.spikeSlabGAM <- function(x, digits=3, printPGamma=TRUE, printModels=TRUE, showModels=NULL, ...){
 	cat(paste("Spike-and-Slab STAR for", switch(as.character(x$family), 
 							"0"= "Gaussian",

@@ -94,13 +94,13 @@
 #' Normal-Mixture-of-Inverse-Gamma Priors for Bayesian Regularization and Model Selection in Structured Additive Regression Models. 
 #' \emph{LMU Munich, Department of Statistics}: Technical Reports, No.84 (\url{http://epub.ub.uni-muenchen.de/11785/})
 #' @export
+#' @import parallel
 #' @importFrom MASS ginv
 #' @importFrom MCMCpack dinvgamma
 #' @importFrom MCMCpack rinvgamma
 #' @importFrom coda mcmc 
 #' @importFrom coda mcmc.list
 #' @importFrom mvtnorm rmvnorm
-#' @import parallel
 #' @useDynLib spikeSlabGAM sampler 
 spikeAndSlab <- function(
   y,    # response (n x 1)
@@ -487,17 +487,13 @@ spikeAndSlab <- function(
   wMat <- likMat <- logPostMat <- sigma2Mat <- matrix(0, nrow=mcmc$chainLength, ncol=1)
   
   
-  parallel <- if(suppressWarnings(require(parallel, quietly = TRUE))){
-    if(Sys.info()["sysname"]!="windows"){
-      "parallel"  
-    } else {
-      "snow"
-    }
+  parallel <- if(Sys.info()["sysname"]!="windows"){
+    "parallel"  
   } else {
-    "none"
+    "snow"
   }
   
-  if(parallel!="none" && (is.null(options()$mc.cores) || is.na(options()$mc.cores))){
+  if((is.null(options()$mc.cores) || is.na(options()$mc.cores))){
     if(interactive()){
       options(mc.cores=as.integer(readline(prompt =
         "Setting up parallel computation:\nHow many processes do you want to run? ")))
@@ -521,17 +517,7 @@ spikeAndSlab <- function(
     if(parallel=="snow"){
       cat("using <parallel> in SOCKET mode -- no progress info available.\n")
     } 
-    if(parallel=="none"){
-      cat(paste("b",
-                "0",
-                paste(rep("-", 8),collapse=""),
-                "100%\n", sep="", collapse=""))	
-    }
   }
-  
-  
-  
-  
   
   do1Chain <- function(i){
     # set seed for each chain s.t. results are reproducible
@@ -647,9 +633,14 @@ spikeAndSlab <- function(
       #if(mcmc$verbose) cat("\nsampling y from posterior predictive...\n")
       mu <- X %*% t(samples$beta) + model$offset
       yPred <- switch(familystr,
-                      gaussian = mu + t(as.vector(sqrt(samples$sigma2)) * matrix(rnorm(n*mcmc$chainLength), nrow=mcmc$chainLength)),
-                      binomial = t(matrix(rbinom(n * mcmc$chainLength, model$scale, plogis(mu)), nrow=mcmc$chainLength)),
-                      poisson = t(matrix(rpois(n * mcmc$chainLength, exp(mu)), nrow=mcmc$chainLength)) 
+                      gaussian = mu + t(as.vector(sqrt(samples$sigma2)) * 
+                                          matrix(rnorm(n*mcmc$chainLength), 
+                                                 nrow=mcmc$chainLength)),
+                      binomial = t(matrix(rbinom(n * mcmc$chainLength, 
+                                                 model$scale, plogis(mu)), 
+                                          nrow=mcmc$chainLength)),
+                      poisson = t(matrix(rpois(n * mcmc$chainLength, exp(mu)), 
+                                         nrow=mcmc$chainLength)) 
       )
       list(mu = mu, y=yPred)		
     } else NULL
@@ -661,7 +652,8 @@ spikeAndSlab <- function(
                     sigma2=sigma2[mcmc$chainLength, , drop=F])
     
     
-    return(list(samples=samples, posteriorPred=posteriorPred, accept=accept, restart=restart))
+    return(list(samples=samples, posteriorPred=posteriorPred, 
+                accept=accept, restart=restart))
   }
   
   #	res <- if(suppressWarnings(require(multicore, quietly = TRUE))){
