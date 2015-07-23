@@ -1,8 +1,8 @@
 
-     citHeader("To cite package 'spikeSlabGAM' in publications, please use one of the following articles. 
-     The JSS (2011) article focuses more on implementation, while theoretical details, simulation results and case studies 
+     citHeader("To cite package 'spikeSlabGAM' in publications, please use one of the following articles.
+     The JSS (2011) article focuses more on implementation, while theoretical details, simulation results and case studies
      are published in JASA (2012):")
-    
+
      citEntry(entry="Article",
               title = "{spikeSlabGAM}: {B}ayesian Variable Selection, Model Choice and Regularization for Generalized Additive Mixed Models in {R}",
               author = personList(as.person("Fabian Scheipl")),
@@ -15,8 +15,8 @@
               textVersion = paste("Fabian Scheipl (2011).",
                "spikeSlabGAM: Bayesian Variable Selection, Model Choice and Regularization for Generalized Additive Mixed Models in R.",
                "Journal of Statistical Software, 43(14), 1--24."),
-     ) 
-     
+     )
+
      citEntry(entry="Article",
               title = "Spike-and-Slab Priors for Function Selection in Structured Additive Regression Models",
               author = personList(as.person("Fabian Scheipl"), as.person("Ludwig Fahrmeir"), as.person("Thomas Kneib")),
@@ -25,8 +25,8 @@
  			  volume = "107",
  			  number = "500",
  			  pages  = "1518--1532",
- 			  url = "DOI:10.1080/01621459.2012.737742",
+ 			  url = "http://dx.doi.org/10.1080/01621459.2012.737742",
               textVersion = paste("Fabian Scheipl, Ludwig Fahrmeir, Thomas Kneib (2012).",
-               "Spike-and-Slab Priors for Function Selection in Structured Additive Regression Models.", 
+               "Spike-and-Slab Priors for Function Selection in Structured Additive Regression Models.",
                "Journal of the American Statistical Association, 107(500), 1518--1532."),
-     )               
+     )
