@@ -5,8 +5,8 @@
 \title{Generate design for penalized surface estimation.}
 \usage{
 srf(coords, K = min(50, sum(nd)/4), rankZ = 0.999, centerBase = TRUE,
-  baseType = c("B", "thinPlate"), decomposition = c("ortho", "MM", "asIs"),
-  tol = 1e-10)
+  baseType = c("B", "thinPlate"), decomposition = c("ortho", "MM",
+  "asIs"), tol = 1e-10)
 }
 \arguments{
 \item{coords}{a \code{data.frame} with two columns containing the coordinates}
@@ -66,11 +66,10 @@ TODO: prediction seems very unstable when extrapolating outside the
   convex hull, sometimes even nonsensical values inside conv.hull close to
   border - problem in akima::interp?
 }
-\author{
-Fabian Scheipl
-}
 \references{
 Ruppert, D., Wand, M.P., Carroll, R.J. (2003). Semiparametric
   Regression. Cambridge University Press
 }
-
+\author{
+Fabian Scheipl
+}

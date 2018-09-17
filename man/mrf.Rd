@@ -4,7 +4,8 @@
 \alias{mrf}
 \title{Generate design for a 2-D Gaussian Markov Random Field}
 \usage{
-mrf(x, N, decomposition = c("ortho", "MM"), tol = 1e-10, rankZ = 0.995)
+mrf(x, N, decomposition = c("ortho", "MM"), tol = 1e-10,
+  rankZ = 0.995)
 }
 \arguments{
 \item{x}{a factor: which observation belongs to which region}
@@ -40,12 +41,11 @@ observations have to be removed from the neighborhood matrix and there is
 currently no \code{predict}-functionality for regions without observations in
 the original data.
 }
-\author{
-Fabian Scheipl
-}
 \references{
 Fahrmeir, L., Lang, S. (2001) Bayesian inference for generalized
   additive mixed models based on Markov random field priors. \emph{Applied
   Statistics}, \bold{50}(2):201--220.
 }
-
+\author{
+Fabian Scheipl
+}
