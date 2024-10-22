@@ -12,5 +12,4 @@ pdfs <- list.files(pattern = glob2rx("UsingSpikeSlabGAMplot*.pdf"))
 file.remove(pdfs)
 file.remove("UsingSpikeSlabGAM.log")
 file.remove("UsingSpikeSlabGAM.tex")
-
-# unlink("./cache", recursive = TRUE)
+unlink("./cache", recursive = TRUE)
